@@ -190,7 +190,7 @@ return bledy(input,a, ktorywiersz, ktorakolumna, wspolrzednaPx, wspolrzednaPy, w
 				}
 				
 				}
-if(!(ktorywiersz==0||ktorakolumna==0||(ktorywiersz==(T[0]-1))||(ktorakolumna==(T[1]-1))))
+if(!(ktorywiersz==0||ktorakolumna==0||(ktorywiersz==(T[0]-1))||(ktorakolumna==(T[1]-1)))||(ktorywiersz==0&&ktorakolumna==0)||(ktorywiersz==0 &&(ktorakolumna==T[1]-1)||(ktorywiersz==T[0]-1 &&ktorakolumna==0 )||(ktorywiersz==T[0]-1 &&ktorakolumna ==T[1]-1)))
 			if(a=='P'||a=='K')
 			{
 return bledy(input,a, ktorywiersz, ktorakolumna, wspolrzednaPx, wspolrzednaPy, wspolrzednaKx, wspolrzednaKy, 6,T);
