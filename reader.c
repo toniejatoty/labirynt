@@ -7,11 +7,11 @@ char czypoprawnylab(char *input, char * aout);
 char * kopiuj_plik(char * input, char *aout)
 {
 	char * kopia =malloc(sizeof(*kopia )* 10);
-       sprintf(kopia,"maze_nowy\0");
+	sprintf(kopia,"maze_nowy\0");
 	FILE * in = fopen(input, "r");
 	if(in==NULL)
 	{
-		fprintf(stderr, "%s: nie moge otworzyc pliku: %s", aout, input);
+		fprintf(stderr, "Program nie posiada uprawnień do otwarcia podanego pliku %s", input);
 		free(kopia);
 		return "BLAD";
 	}
@@ -84,7 +84,7 @@ default:
 	return 0;
 break;
 }
-return 1;
+return 0;
 }
 //
 //
@@ -209,5 +209,5 @@ return bledy(input,a, ktorywiersz, ktorakolumna, wspolrzednaPx, wspolrzednaPy, w
 if(wspolrzednaKx==-1)
 return bledy(input,a, ktorywiersz, ktorakolumna, wspolrzednaPx, wspolrzednaPy, wspolrzednaKx, wspolrzednaKy, 8,T);
 	
-	
+return 0;	
 }

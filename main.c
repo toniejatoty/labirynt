@@ -45,8 +45,12 @@ if(czybylom == 0 )
 //
 //
 //
-char * zpliku2 =kopiuj_plik(zpliku, argv[0]);
-if(zpliku2=="BLAD"){
+char buf[10];
+strcpy(buf, kopiuj_plik(zpliku, argv[0]));
+char *zpliku2=malloc(sizeof(*zpliku)*strlen(buf)+1);
+strcpy(zpliku2, buf);
+if(strcmp(zpliku2, "BLAD")==0){
+//	fprintf(stderr, "cos  blad z reader.c\n");
 free(zpliku);
 free(zpliku2);
 return 1;
@@ -58,9 +62,13 @@ FILE *in = fopen(zpliku, "r");
 while((a=fgetc(in))!=EOF){
 	printf("%c",a);
 }
+int *T = malloc(sizeof(*T)*4);
+//printf("%s",zpliku2);
+T=rozmiar(zpliku2);
+//printf("%d--> %d", T[0], T[1]);
 fclose(in);
 free(zpliku);
-//free(zpliku2); nie wiem czemu ale jest blad z tym	
+free(zpliku2);
 return 0;
 
 }
