@@ -1,3 +1,4 @@
+#include "solver.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <getopt.h>
@@ -50,7 +51,6 @@ strcpy(buf, kopiuj_plik(zpliku, argv[0]));
 char *zpliku2=malloc(sizeof(*zpliku)*strlen(buf)+1);
 strcpy(zpliku2, buf);
 if(strcmp(zpliku2, "BLAD")==0){
-//	fprintf(stderr, "cos  blad z reader.c\n");
 free(zpliku);
 free(zpliku2);
 return 1;
@@ -59,13 +59,11 @@ return 1;
 char a;
 
 FILE *in = fopen(zpliku, "r");
-while((a=fgetc(in))!=EOF){
-	printf("%c",a);
-}
 int *T = malloc(sizeof(*T)*4);
-//printf("%s",zpliku2);
 T=rozmiar(zpliku2);
-//printf("%d--> %d", T[0], T[1]);
+if(nazwijwierzcholki( zpliku, T[0], T[1])==0)
+	printf("sukces");
+
 fclose(in);
 free(zpliku);
 free(zpliku2);

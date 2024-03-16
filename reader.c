@@ -78,6 +78,11 @@ case 9:
 fprintf(stderr,"Podany plik %s zawiera labirynt o rozmiarze %d, %d, a maksymalny akceptowalny rozmiar to 1024×1024. Proszę podać plik z mapą o poprawnym formacie, z odpowiednim romziarem",input, T[0], T[1]);
 		return 1;	
 break;
+case 10:
+fprintf(stderr,"Podany plik %s zawiera labirynt o rozmiarze %d, %d, a minimalny akceptowalny rozmiar to 3×3. Proszę podać plik z mapą o poprawnym formacie, z odpowiednim romiarem",input, T[0], T[1]);
+		return 1;	
+break;
+
 
 
 default:
@@ -149,15 +154,20 @@ char czypoprawnylab(char *input, char *aout)
 	int *T;
 	T = rozmiar(input);
 		FILE * in = fopen(input, "r");
-		if(T[0]>1024 || T[1]>1024)
+		if(T[0]>1025 || T[1]>1025)
 		{
 return bledy(input,a, ktorywiersz, ktorakolumna, wspolrzednaPx, wspolrzednaPy, wspolrzednaKx, wspolrzednaKy, 9,T);
 	
 		}
+		
+
+
 	if(T[1]==-1)
 		return bledy(input,a, ktorywiersz, ktorakolumna, wspolrzednaPx, wspolrzednaPy, wspolrzednaKx, wspolrzednaKy, 5,T);
 	//nie rowna ilosc kolumn
-
+if(T[1]<=2 || T[0]<=2)
+return bledy(input,a, ktorywiersz, ktorakolumna, wspolrzednaPx, wspolrzednaPy, wspolrzednaKx, wspolrzednaKy, 10,T);
+	
 	while(((a=fgetc(in))!=EOF)){
 			if(a!='P' && a!='K'&&a!='X'&&a!=' '&&a!='\n')
 
