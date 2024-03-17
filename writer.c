@@ -6,6 +6,8 @@ void save(int i, FILE *out, list_t *T) {
 	if(T[i] == NULL)
 		exit(EXIT_FAILURE);
 	list_t pointer = malloc(sizeof*pointer);
+	if(pointer == NULL)
+		exit(EXIT_FAILURE);
 	pointer->next = T[i];
 	pointer=pointer->next;
 	while(pointer->czy_min != 1) {
