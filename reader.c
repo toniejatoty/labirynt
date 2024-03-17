@@ -4,41 +4,6 @@
 #include <string.h>
 char czypoprawnylab(char *input, char * aout);
 
-char * kopiuj_plik(char * input, char *aout)
-{
-	char * kopia =malloc(sizeof(*kopia )* 10);
-	sprintf(kopia,"maze_nowy\0");
-	FILE * in = fopen(input, "r");
-	if(in==NULL)
-	{
-		fprintf(stderr, "Program nie posiada uprawnień do otwarcia podanego pliku %s", input);
-		free(kopia);
-		return "BLAD";
-	}
-	FILE * out = fopen(kopia, "w");
-	if(out == NULL)
-		{
-		
-		fprintf(stderr, "%s: nie moge zapisac do pliku: %s", aout, kopia);
-		free(kopia);
-		fclose(in);
-		return "BLAD";
-
-		}
-	char a;
-	while(((a=(fgetc(in)))!=EOF)){
-		fprintf(out, "%c",a);}
-		fclose(in);
-		fclose(out);
-		if((czypoprawnylab(input,aout))==0)
-		return kopia;
-		else return "BLAD";
-}
-//
-///
-///
-///
-///
 char bledy(char * input,char a, int ktorywiersz, int ktorakolumna, int wspolrzednaPx, int wspolrzednaPy, int wspolrzednaKx, int wspolrzednaKy, char komunikat, int T[] )
 {
 switch(komunikat){

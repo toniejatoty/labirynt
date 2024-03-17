@@ -3,6 +3,7 @@
 #include <stdlib.h>
 #include <getopt.h>
 #include <string.h>
+#include "help.h"
 #include "reader.h"
 int main(int argc, char ** argv)
 {
@@ -32,8 +33,8 @@ while((opt=getopt(argc, argv, "m:o:h"))!=-1){
 	}}
 if(h==4)
 	{
-	printf("intsrukcja");
-	return 0;
+	help();
+		return 0;
 	}
 if(czybylom == 0 )
 	{
@@ -46,13 +47,17 @@ if(czybylom == 0 )
 //
 //
 //
-char buf[10];
-strcpy(buf, kopiuj_plik(zpliku, argv[0]));
-char *zpliku2=malloc(sizeof(*zpliku)*strlen(buf)+1);
-strcpy(zpliku2, buf);
-if(strcmp(zpliku2, "BLAD")==0){
+FILE * intest  =fopen(zpliku, "r");
+if(intest==NULL)
+{
+fprintf(stderr, "Program nie posiada uprawnień do otwarcia podanego pliku %s", zpliku);
 free(zpliku);
-free(zpliku2);
+return 1;
+}
+fclose(intest);
+if((czypoprawnylab(zpliku,argv[0]))!=0)
+{
+free(zpliku);
 return 1;
 //BYc moze tutaj eszcze cos zwolnic
 }
@@ -60,13 +65,12 @@ char a;
 
 FILE *in = fopen(zpliku, "r");
 int *T = malloc(sizeof(*T)*4);
-T=rozmiar(zpliku2);
+T=rozmiar(zpliku);
 if(nazwijwierzcholki( zpliku, T[0], T[1])==0)
 	printf("sukces");
 
 fclose(in);
 free(zpliku);
-free(zpliku2);
 return 0;
 
 }
