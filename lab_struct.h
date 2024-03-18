@@ -6,7 +6,7 @@ typedef struct elem {
 	int kierunek;		//zmiana kierunku w porównaniu do poprzedniego wierzchołka(pierwszego elementu listy): -1 - turn left, 1 - turn right
 	int odl;		//odległość między wierzchołkami
 	int czy_min;		//czy następny na najkrótszej ścieżce: 1 - tak, 0 - nie
-	elem *next;
+	struct elem *next;
 } *list_t;
 
 #endif
