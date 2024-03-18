@@ -1,9 +1,47 @@
+#include <limits.h>
 #include "pathfinder.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include "structure.h"
+void backasfarasyoucan(structure finish, int * T)
+{
+structure tmp2;
+	if(finish->prev==NULL) return;
+structure tmp= finish -> prev;
+do
+{tmp2=tmp;
+	if(tmp->prev!=NULL)
+tmp=tmp->prev;
+free(tmp2); // TU MOGA BYC BLEDY ZE FREE UZYLEM A POTEM W CORRIDORS>=3 sie cofam a tu position==NULL
+}
+while(tmp->prev!=NULL && tmp->down!=NULL && tmp -> up !=NULL && tmp->right!=NULL && tmp-> left!=NULL&& tmp->down->s==-1&& tmp->up->s==-1 && tmp->right->s==-1 && tmp->left->s==-1);
+}
+void delasmuch(structure finish, int *T)
+{
 
+	if(finish->prev==NULL){printf("nie powinno byc bledu ale w razie czego to pathfindr backasfar"); return;}
+structure tmp= finish;
+do
+{
+	if(finish->prev!=NULL)
+	tmp=finish;
+		finish=finish->prev;
+free(tmp); // TU MOGA BYC BLEDY ZE FREE UZYLEM A POTEM W CORRIDORS>=3 sie cofam a tu position==NULL
+}
+while(finish->prev!=NULL && finish->down!=NULL && finish -> up !=NULL && finish->right!=NULL && finish-> left!=NULL&& finish->down->s==-1&& finish->up->s==-1 && finish->right->s==-1 && finish->left->s==-1);
+}
+/*
+void findwspolne(structure oldfinish, structure newfinish)
+{
+	structure old=finish;
+	structure new=newfinish;
+while(old->prev!=NULL)
+{ old=old->prev;
+
+while(new->prev!=NULL)
+}
+}*/
 char **load(char **maze ,char * input, int *T)
 {
 	int cc=0, ll=0;
@@ -162,7 +200,7 @@ if(T[2]==0&&T[3]==0)
 T[9]=T[2];
 	return maze;
 }
-void make(char ** maze, char * input, int *T, int from, structure position, structure special )
+void make(char ** maze, char * input, int *T, int from, structure position, structure finish,structure special)
 {int upp=0,rright=0, ddown=0, lleft=0; //to know what directories are possible to reach in wierzcholek 
 int corridors = 0;
 int fromorg = from;
@@ -171,65 +209,121 @@ position->up = NULL;
 position->right = NULL;
 position->down = NULL;
 position->left = NULL;
+int Pon=-1;
+int Kon=-1; //if k is on up 1 right 2 ...
 do
-{
-if(T[2]%100!=0){if(maze[(T[2]-1)%100][T[3]]==' '){corridors ++; upp++; }
-}else{T[2]--; maze=load(maze, input, T); if(maze[(T[2]-1)%100][T[3]]==' '){corridors ++;upp++;}
+{corridors=0;
+	upp=0; ddown=0; rright=0; lleft=0;
+if(T[0]%100!=0){if(maze[(T[0]-1)%100][T[1]]==' '||maze[(T[0]-1)%100][T[1]]=='P'){corridors ++; upp++; }
+if(maze[(T[0]-1)%100][T[1]]=='K'){Kon=1;}
+}else{T[2]--; maze=load(maze, input, T); if(maze[(T[0]-1)%100][T[1]]==' '||maze[(T[0]-1)%100][T[1]]=='P'){corridors ++;upp++;}
+ if(maze[(T[0]-1)%100][T[1]]=='K'){Kon=1;}
 T[2]++; maze=load(maze,input,T);}
-if(T[2]%100!=99){if(maze[(T[2]+1)%100][T[3]]==' '){corridors ++;ddown++;}}
-else{T[2]++; maze=load(maze, input, T); if(maze[(T[2]+1)%100][T[3]]==' '){corridors ++;ddown++;}
+if(T[0]%100!=99){if(maze[(T[0]+1)%100][T[1]]==' '||(maze[(T[0]+1)%100][T[1]]=='P')){corridors ++;ddown++;}
+if(maze[(T[0]+1)%100][T[1]]=='K')Kon=3;}
+else{T[2]++; maze=load(maze, input, T); if(maze[(T[0]+1)%100][T[1]]==' '||(maze[(T[0]+1)%100][T[1]]=='P')){corridors ++;ddown++;}
+if(maze[(T[0]+1)%100][T[1]]=='K')Kon=3;
 T[2]--; maze=load(maze,input,T);}
-if(maze[T[2]][T[3]-1]==' '){corridors ++;lleft++;}
-if(maze[T[2]][T[3]+1]==' '){corridors ++;rright++;}
+if(maze[T[0]][T[1]-1]==' '||maze[T[0]][T[1]-1]=='P'){corridors ++;lleft++;}
+if(maze[T[0]][T[1]-1]=='K')Kon=4;
+if(maze[T[0]][T[1]+1]==' '||maze[T[0]][T[1]+1]=='P'){corridors ++;rright++;}
+if(maze[T[0]][T[1]+1]=='K')Kon=2;
 if(corridors==2){
 if(upp==1&&from !=1){if(T[0]%100==0){T[2]--; maze=load(maze, input,T);}T[0]--;from=3;}
-if(ddown==1&&from !=3){if(T[0]%100==99){T[2]++; maze=load(maze, input, T);}T[0]++; from=1; }
-if(lleft==1&& from !=4 ){T[1]--; from =2; }
-if(rright==1&&from != 2){T[1]++; from =4;}
+else if(ddown==1&&from !=3){if(T[0]%100==99){T[2]++; maze=load(maze, input, T);}T[0]++; from=1; }
+else if(lleft==1&& from !=4 ){T[1]--; from =2; }
+else if(rright==1&&from != 2){T[1]++; from =4;}
 s++;
-}}
+}
+}
 while(corridors==2);
-if(corridors>=3)
+if(Kon!=-1)
 {
+	printf("ZNALAZLEM SIE W K odl wynosi %d\n",s);
+if(s < finish->s)
+{
+backasfarasyoucan(finish, T);
+finish->s = s; 
+finish ->prev = position;
+}
+else
+{
+delasmuch(position,T);
+}
+}	
+if(corridors>=3)
+{position->s = s;
+	position->x = T[0]; // jak bedzie brakowac miejsca to bedzie pierwsza rzecz do odstrzalu wraz z y
+position->y = T[1];
 	if(upp==1&&from!=1)
 	{
 	position->up = malloc(sizeof(*position));
-       	position->up->s = s;
-	make(maze, input, T, 3, position->up,special);	
+       	position->up->s = s; // tu chyba tez from org
+	if(T[0]%100==0)
+	{
+	T[2]--;
+	maze=load(maze,input,T);
+	}
+	T[0]--;
+	make(maze, input, T, 3, position->up,finish, special);	
+	T[0]=position->x;
+	if(T[0]%100==0)
+	{T[2]++;
+		maze=load(maze,input,T);
+	}
 	}
 	else position->up = special;
 	if(ddown==1&&from!=3)
 	{
+	if(T[0]%100==99)
+	{
+	T[2]++;
+	maze=load(maze,input,T);
+	}
+	T[0]++;
 	position->down = malloc(sizeof(*position));
        	position->down->s = s;
-	make(maze, input, T, 1, position->down,special);	
+	make(maze, input, T, 1, position->down,finish, special);	
+	T[0]=position->x;
+	if(T[0]%100==99)
+	{T[2]--;
+		maze=load(maze,input,T);
+	}
 	}
 	else position->down=special;
 	if(rright==1&&from!=2)
-	{
+	{ T[1]++;
 	position->right = malloc(sizeof(*position));
        	position->right->s = s;
-	make(maze, input, T,4 , position->right,special);	
+	make(maze, input, T,4 , position->right, finish, special);	
+	T[1]=position->y;
 	}
 	else position->right=special;
 	if(lleft==1&&from!=4)
 	{
+		T[1]--;
 	position->left = malloc(sizeof(*position));
        	position->left->s = s;
-	make(maze, input, T, 2, position->left,special);	
+	make(maze, input, T, 2, position->left, finish,special );	
+	T[1]=position->y;
 	}
 	else position->left = special;
 }
-	if(corridors==1)
+
+else if(corridors==1)
 {
 	if(fromorg == 1)
-	position->prev->down=special;
+	if(position->prev!=NULL)
+	position->prev->down=NULL;
 	if(fromorg == 2)
-	position->prev->left=special;
+		if(position->prev!=NULL)
+	position->prev->left=NULL;
 	if(fromorg == 3)
-	position->prev->up=special;
+		if(position->prev!=NULL)
+	position->prev->up=NULL;
 	if(fromorg == 4)
-	position->prev->right=special;
+		if(position->prev!=NULL)
+	position->prev->right=NULL;
 	free(position);
 }
 	}
@@ -260,52 +354,16 @@ if(T[0]==0){T[0]++; from =1;}
 if(T[1]==0){T[1]++; from = 4; }
 if(T[0]==T[5]){T[0]--; from =3;}//moze byc blad ze trzeba skorzystac z load fukcji
 if(T[1]==T[6]){T[1]--;from=2;}
-
+structure finish = malloc(sizeof(*finish));
+finish->prev=NULL;
+finish->s = INT_MAX;
 structure start = malloc(sizeof(*start));
 structure position = start; // actual my position in structure
-structure special = malloc(sizeof(*special)); // special structure which will define that from wierzcholek is lack of connection
-special->s = -1;
-int upp=0,rright=0, ddown=0, lleft=0; //to know what directories are possible to reach in wierzcholek 
-int corridors = 0;
-if(T[2]!=T[3])
-{
-if(T[2]%100!=0){if(maze[(T[2]-1)%100][T[3]]==' '){corridors ++; upp++; }
-}else{T[2]--; maze=load(maze, input, T); if(maze[(T[2]-1)%100][T[3]]==' '){corridors ++;upp++;}
-T[2]++; maze=load(maze,input,T);}
-if(T[2]%100!=99){if(maze[(T[2]+1)%100][T[3]]==' '){corridors ++;ddown++;}}
-else{T[2]++; maze=load(maze, input, T); if(maze[(T[2]+1)%100][T[3]]==' '){corridors ++;ddown++;}
-T[2]--; maze=load(maze,input,T);}
-if(maze[T[2]][T[3]-1]==' '){corridors ++;lleft++;}
-if(maze[T[2]][T[3]+1]==' '){corridors ++;rright++;}
-
-
-if(corridors>=3)
-{
-	if(upp==1&&from!=1)
-	{
-	position->up = malloc(sizeof(*position));
-       	position->up->s = s;	
-	}
-}
-
-if(corridors==2)
-{
-if(upp==1&&from !=1){if(T[0]%100==0){T[2]--; maze=load(maze, input,T);}T[0]--;from=3;}
-if(ddown==1&&from !=3){if(T[0]%100==99){T[2]++; maze=load(maze, input, T);}T[0]++; from=1; }
-if(lleft==1&& from !=4 ){T[1]--; from =2; }
-if(rright==1&&from != 2){T[1]++; from =4;}
-s++;
-}
-	if(corridors==1)
-;
-	}
-else if(T[2]==T[3])
-{
-
-}	
-
-corridors=0;
-
+structure special = malloc(sizeof(*special)); // to differ null null when no checked special when no connection
+start->s=0;
+make(maze, input, T, from, start, finish,special);
+printf("INT MAX wynosi %d \n", INT_MAX);
+printf("%d", finish->s);
 for(int i=0; i<100; i++)
 	free(maze[i]);
 free(maze);

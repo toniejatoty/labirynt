@@ -9,7 +9,8 @@ typedef struct elem
 	struct elem *right;	//wskaznik na element z prawa
 	struct elem *down;
 	struct elem *left;
-
+int x;
+int y; //wspolrzedne wierzcholka jak bedzie brakowac pamieci to bedzie peirwsza rzecz do usuniecia
 }*structure;
 
 
