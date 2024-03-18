@@ -3,6 +3,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include "pathfinder.h"
 char nazwijwierzcholki(char * input, int lmax, int cmax)
 {
 FILE * in =fopen(input,"r");
@@ -23,7 +24,7 @@ return 0;
 }
 int l=0;
 int c=0;
-char a;
+unsigned char a;
 while(l<=2)
 {
 a=fgetc(in);
@@ -44,16 +45,16 @@ int corner=2;
 char up,down,right,left;
 if(line==2)
 	for(int i=0; i<cmax; i++)
-	fprintf(out, "%c",maze[0][i]);
+	fprintf(out, "%c",'X');
 	fprintf(out, "\n");
 	while(line<=lmax-1)
 {
 for(int i=0; i<cmax; i++)
 {
 	a=maze[whichmid][i];
-	if(a=='X')fprintf(out, "%c",a);
-	else if(a=='P') fprintf(out, "1");
-	else if(a=='K') fprintf(out, "0");
+	if(a=='X')fprintf(out, "%c",'X');
+	else if(a=='P') fprintf(out, "P");
+	else if(a=='K') fprintf(out, "K");
 	else if(a==' ')
 	{
 		up=maze[whichup][i];
@@ -71,7 +72,7 @@ for(int i=0; i<cmax; i++)
 			corridor++;
 		}
 	if(corridor>=3){
-		fprintf(out,"%d", corner);
+		fprintf(out,"%c", ' ');
 	corner++;
 	}
 	else{fprintf(out, " ");}
@@ -111,7 +112,10 @@ for(int j=0; j<=cmax; j++){
 if(j!=cmax)fprintf(stderr,"%c",maze[i][j]);
 if(j==cmax)printf("\n");
 }*/
-
+fclose(in);
+fclose(out);
+int *T;
+T=way(input, lmax, cmax);
 return 0;
 }
 
