@@ -6,6 +6,7 @@
 #include "structure.h"
 void backasfarasyoucan(structure finish, int * T)
 {
+	//return;
 structure tmp2;
 	if(finish->prev==NULL) return;
 structure tmp= finish -> prev;
@@ -19,7 +20,7 @@ while(tmp->prev!=NULL && tmp->down!=NULL && tmp -> up !=NULL && tmp->right!=NULL
 }
 void delasmuch(structure finish, int *T)
 {
-
+//return;
 	if(finish->prev==NULL){printf("nie powinno byc bledu ale w razie czego to pathfindr backasfar"); return;}
 structure tmp= finish;
 do
@@ -228,7 +229,7 @@ if(maze[T[0]][T[1]-1]==' '||maze[T[0]][T[1]-1]=='P'){corridors ++;lleft++;}
 if(maze[T[0]][T[1]-1]=='K')Kon=4;
 if(maze[T[0]][T[1]+1]==' '||maze[T[0]][T[1]+1]=='P'){corridors ++;rright++;}
 if(maze[T[0]][T[1]+1]=='K')Kon=2;
-if(corridors==2){
+if(corridors==2&&Kon==-1){
 if(upp==1&&from !=1){if(T[0]%100==0){T[2]--; maze=load(maze, input,T);}T[0]--;from=3;}
 else if(ddown==1&&from !=3){if(T[0]%100==99){T[2]++; maze=load(maze, input, T);}T[0]++; from=1; }
 else if(lleft==1&& from !=4 ){T[1]--; from =2; }
@@ -236,7 +237,8 @@ else if(rright==1&&from != 2){T[1]++; from =4;}
 s++;
 }
 }
-while(corridors==2);
+while(corridors==2&&Kon==-1);
+s++;
 if(Kon!=-1)
 {
 	printf("ZNALAZLEM SIE W K odl wynosi %d\n",s);
@@ -251,22 +253,24 @@ else
 delasmuch(position,T);
 }
 }	
-if(corridors>=3)
+if(corridors>=3&&Kon==-1)
 {position->s = s;
 	position->x = T[0]; // jak bedzie brakowac miejsca to bedzie pierwsza rzecz do odstrzalu wraz z y
 position->y = T[1];
 	if(upp==1&&from!=1)
 	{
 	position->up = malloc(sizeof(*position));
-       	position->up->s = s; // tu chyba tez from org
+       	position->up->s = s+1; //tu chyba tez fromorg 
 	if(T[0]%100==0)
 	{
 	T[2]--;
 	maze=load(maze,input,T);
 	}
 	T[0]--;
+	position->up->prev = position;
 	make(maze, input, T, 3, position->up,finish, special);	
 	T[0]=position->x;
+	T[1]=position->y;
 	if(T[0]%100==0)
 	{T[2]++;
 		maze=load(maze,input,T);
@@ -282,9 +286,11 @@ position->y = T[1];
 	}
 	T[0]++;
 	position->down = malloc(sizeof(*position));
-       	position->down->s = s;
+       	position->down->s = s+1;
+	position->down->prev=position;
 	make(maze, input, T, 1, position->down,finish, special);	
 	T[0]=position->x;
+	T[1] = position->y;
 	if(T[0]%100==99)
 	{T[2]--;
 		maze=load(maze,input,T);
@@ -294,18 +300,22 @@ position->y = T[1];
 	if(rright==1&&from!=2)
 	{ T[1]++;
 	position->right = malloc(sizeof(*position));
-       	position->right->s = s;
+       	position->right->s = s+1;
+	position->right->prev=position;
 	make(maze, input, T,4 , position->right, finish, special);	
 	T[1]=position->y;
+	T[0]=position->x;
 	}
 	else position->right=special;
 	if(lleft==1&&from!=4)
 	{
 		T[1]--;
 	position->left = malloc(sizeof(*position));
-       	position->left->s = s;
+       	position->left->s = s+1;
+	position->left->prev=position;
 	make(maze, input, T, 2, position->left, finish,special );	
 	T[1]=position->y;
+	T[0]=position->x;
 	}
 	else position->left = special;
 }
@@ -314,7 +324,8 @@ else if(corridors==1)
 {
 	if(fromorg == 1)
 	if(position->prev!=NULL)
-	position->prev->down=NULL;
+		if((position->prev->down)!=NULL)
+	position->prev->down=special;
 	if(fromorg == 2)
 		if(position->prev!=NULL)
 	position->prev->left=NULL;
@@ -360,6 +371,7 @@ finish->s = INT_MAX;
 structure start = malloc(sizeof(*start));
 structure position = start; // actual my position in structure
 structure special = malloc(sizeof(*special)); // to differ null null when no checked special when no connection
+special->s=-1;
 start->s=0;
 make(maze, input, T, from, start, finish,special);
 printf("INT MAX wynosi %d \n", INT_MAX);
