@@ -66,8 +66,9 @@ char a;
 FILE *in = fopen(zpliku, "r");
 int *T = malloc(sizeof(*T)*4);
 T=rozmiar(zpliku);
-if(nazwijwierzcholki( zpliku, T[0], T[1])==0)
-	printf("sukces");
+int *o;
+o= way( zpliku, T[0], T[1] );
+printf("sukcess");
 fclose(in);
 free(zpliku);
 return 0;
