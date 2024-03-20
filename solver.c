@@ -7,7 +7,7 @@
 #include <string.h>
 #include "structure.h"
 #include "zwalnianie.h"
-char wasvisited(structure start, structure position)
+char wasvisited(structure start, structure position, structure special)
 { 
         char rreturn;
         if(position==NULL){printf("nie powinienem tu byc 19 linia w rozwiazywaniu"); return 1;}
@@ -15,20 +15,20 @@ char wasvisited(structure start, structure position)
         if(position==start) return 1;
 if(position->x == start->x && position->y == start->y)
 {
-if((position->s < start->s)&&( position->s!=-1)&&(start->s!=-1)){freeafterposition(start);
+if((position->s < start->s)&&( position->s!=-1)&&(start->s!=-1)){freeafterposition(start,special);
 //Tu grzebie moze byc problem z tym
 start=NULL;
 }
-else if ((position->s > start->s) &&(position->s !=-1)&&(start->s!=-1) ){freeafterposition(position);
+else if ((position->s > start->s) &&(position->s !=-1)&&(start->s!=-1) ){freeafterposition(position, special);
 position=NULL;}
 return 2;
 }
 else
 {
-if(start->up !=NULL)if(start->up->s!=-1)rreturn =wasvisited(start->up, position);
-if(start->down!=NULL )if(rreturn!=2)if(start->down->s!=-1)rreturn = wasvisited(start->down, position);
-if(start->right!=NULL)if(rreturn!=2)if(start->right->s!=-1)rreturn = wasvisited(start->right, position);
-if(start->left!=NULL)if(rreturn!=2)if(start->left->s!=-1)rreturn = wasvisited(start->left, position);
+if(start->up !=NULL)if(start->up->s!=-1)rreturn =wasvisited(start->up, position, special);
+if(start->down!=NULL )if(rreturn!=2)if(start->down->s!=-1)rreturn = wasvisited(start->down, position, special);
+if(start->right!=NULL)if(rreturn!=2)if(start->right->s!=-1)rreturn = wasvisited(start->right, position, special);
+if(start->left!=NULL)if(rreturn!=2)if(start->left->s!=-1)rreturn = wasvisited(start->left, position, special);
 
 
 }
@@ -95,7 +95,7 @@ if(corridors>=3&&Kon==-1)
         position->x = T[0]; // jak bedzie brakowac miejsca to bedzie pierwsza rzecz do odstrzalu wraz z y
 position->y = T[1];
 structure tmp = start;
-if(wasvisited(tmp, position)!=2){
+if(wasvisited(tmp, position,special)!=2){
         if(upp==1&&from!=1)
         {
         position->up = malloc(sizeof(*position));
@@ -167,7 +167,7 @@ else if(corridors==1&&Kon!=-1)
         position->prev->down=special;
         if(fromorg == 2)
                 if(position->prev!=NULL)
-        position->prev->left=NULL;
+        position->prev->left=special;
         if(fromorg == 3)
                 if(position->prev!=NULL)
         position->prev->up=special;
@@ -176,7 +176,21 @@ else if(corridors==1&&Kon!=-1)
         position->prev->right=special;
         free(position);
 }
-}       }
+}
+if(position->up !=NULL) if (position->up->s==-1)
+if(position->down !=NULL) if (position->down->s==-1)
+if(position->right !=NULL) if (position->right->s==-1)
+if(position->left !=NULL) if (position->left->s==-1)
+{
+if(fromorg==1)if(position->prev!=NULL){position->prev->down=special;free(position);}
+if(fromorg==2)if(position->prev!=NULL){position->prev->left=special;free(position);}
+if(fromorg==3)if(position->prev!=NULL){position->prev->up=special;free(position);}
+if(fromorg==4)if(position->prev!=NULL){position->prev->right=special;free(position);}
+
+
+free(position);
+
+}}
 int *way(char * input, int l, int c)
 {
         int s=0; // distance between wierzhcolki
