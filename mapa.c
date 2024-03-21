@@ -17,7 +17,7 @@ char **load(char **maze ,char * input, int *T)
                 if(a==EOF)return maze;
 if(i>=from)
 {
-maze[ll%100][cc%100]=a;
+maze[ll%100][cc]=a;
 }
                 if(a=='\n')
 {
@@ -37,7 +37,7 @@ else
                 if(a==EOF)return maze;
 if(i>=from)
 {
-maze[ll%100][cc%100]=a;
+maze[ll%100][cc]=a;
 }
                 if(a=='\n')
 {
@@ -58,8 +58,7 @@ char **whereP(char ** maze, int l , int c, char * input, int *T)
         maze = load(maze, input, T);
         char a='K';
         while(a!='P')
-        {
-if(T[2]==0&&T[3]==0)
+	{if(T[2]==0&&T[3]==0)
 {
                         for(int i=0; i<T[6]; i++)
                         {
@@ -137,13 +136,13 @@ if(T[2]==0&&T[3]==0)
         if(maze[j][0]=='P')
         {
         a='P';
-        T[7]=j;
+        T[7]=j+100*T[2];
         T[8]=0;
         }
         if(maze[j][T[6]]=='P')
         {
         a='P';
-        T[7]=j;
+        T[7]=j+100*T[2];
         T[8]=T[6];
         }
         }
@@ -154,10 +153,10 @@ if(T[2]==0&&T[3]==0)
         {
                 if(T[2]==T[3])T[2]=0;
                 else T[2]++;
-        maze=load(maze , input,T);
+		maze=load(maze , input,T);
 
         }
-        }
+}
 T[9]=T[2];
         return maze;
 }

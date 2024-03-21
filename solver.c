@@ -229,7 +229,6 @@ special->s=-1;
 special->up=NULL; special->down=NULL; special->right=NULL; special->left=NULL;
 start->s=0;
 make(start, maze, input, T, from, start, finish,special);
-printf("INT MAX wynosi %d \n", INT_MAX);
 printf("%d", finish->s);
 for(int i=0; i<100; i++)
         free(maze[i]);
