@@ -200,6 +200,7 @@ delasmuch(position,T);
 }
 if(corridors>=3&&Kon==-1)
 {position->s = s;
+	//printf("ZNALAZLEM SIE wedlug programu w wierzczholku T[0] = %d, T[1] = %d\n", T[0], T[1]);
         position->x = T[0]; // jak bedzie brakowac miejsca to bedzie pierwsza rzecz do odstrzalu wraz z y
 position->y = T[1];
 structure tmp = start;
@@ -212,11 +213,12 @@ if(wasvisited(tmp, position,special)!=2){
         {
         T[2]--;
         maze=load(maze,input,T);
-        }
+	}
         T[0]--;
         position->up->prev = position;
         make(start, maze, input, T, 3, position->up,finish, special);
-        T[0]=position->x;
+        if(position->up->up!=NULL && position->up->up->s ==-1 && position->up->down!=NULL && position->up->down ->s ==-1 && position->up->right!=NULL &&position->up->right->s ==-1 && position->up->left!=NULL && position->up->left->s==-1){free(position->up); position->up = special; printf("OHO zwalniam T[0] = %d, T[1] = %d", T[0], T[1]);}
+	T[0]=position->x;
         T[1]=position->y;
         if(T[0]%100==0)
         {T[2]++;
@@ -236,7 +238,9 @@ if(wasvisited(tmp, position,special)!=2){
         position->down->s = s+1;
         position->down->prev=position;
         make(start, maze, input, T, 1, position->down,finish, special);
-        T[0]=position->x;
+        
+if(position->down->up!=NULL && position->down->up->s ==-1 && position->down->down!=NULL && position->down->down ->s ==-1 && position->down->right!=NULL &&position->down->right->s ==-1 && position->down->left!=NULL && position->down->left->s==-1){free(position->down); position->down = special; printf("OHO zwalniam T[0] = %d, T[1] = %d", T[0], T[1]);}
+	T[0]=position->x;
         T[1] = position->y;
         if(T[0]%100==99)
         {T[2]--;
@@ -250,7 +254,10 @@ if(wasvisited(tmp, position,special)!=2){
         position->right->s = s+1;
         position->right->prev=position;
         make(start, maze, input, T,4 , position->right, finish, special);
-        T[1]=position->y;
+
+        if(position->right->up!=NULL && position->right->up->s ==-1 && position->right->down!=NULL && position->right->down ->s ==-1 && position->right->right!=NULL &&position->right->right->s ==-1 && position->right->left!=NULL && position->right->left->s==-1){free(position->right); position->right = special; printf("OHO zwalniam T[0] = %d, T[1] = %d", T[0], T[1]);}
+
+	T[1]=position->y;
         T[0]=position->x;
         }
         else position->right=special;
@@ -260,45 +267,60 @@ if(wasvisited(tmp, position,special)!=2){
         position->left = malloc(sizeof(*position));
         position->left->s = s+1;
         position->left->prev=position;
-        make(start, maze, input, T, 2, position->left, finish,special );
+		make(start, maze, input, T, 2, position->left, finish,special );
+        
+        if(position->left->up!=NULL && position->left->up->s ==-1 && position->left->down!=NULL && position->left->down ->s ==-1 && position->left->right!=NULL &&position->left->right->s ==-1 && position->left->left!=NULL && position->left->left->s==-1){free(position->left); position->left = special; printf("OHO zwalniam T[0] = %d, T[1] = %d", T[0], T[1]);}
         T[1]=position->y;
         T[0]=position->x;
         }
         else position->left = special;
-}
+}}
 
-else if(corridors==1&&Kon!=-1)
+else if(corridors==1&&Kon==-1)
 {
         if(fromorg == 1)
         if(position->prev!=NULL)
                 if((position->prev->down)!=NULL)
+		{
         position->prev->down=special;
+		}
         if(fromorg == 2)
                 if(position->prev!=NULL)
+		{
         position->prev->left=special;
+		}
         if(fromorg == 3)
                 if(position->prev!=NULL)
+		{
         position->prev->up=special;
+		}
         if(fromorg == 4)
                 if(position->prev!=NULL)
         position->prev->right=special;
-        free(position);
+
+        printf("ZWALANIAM position->%d, position->%d\n",position->x, position->y);
+	free(position);
+	
 }
-}
-if(position->up !=NULL) if (position->up->s==-1)
-if(position->down !=NULL) if (position->down->s==-1)
-if(position->right !=NULL) if (position->right->s==-1)
-if(position->left !=NULL) if (position->left->s==-1)
+
+//printf("JESTEM W T[0] %d, T[1] %d\n", T[0], T[1]);
+/*
+if(position->up !=NULL){printf("1 "); if (position->up->s==-1){printf("2 ");
+	{if(position->down !=NULL){printf("3 "); if (position->down->s==-1){printf("4 ");
+	{if(position->right !=NULL){ printf("5 "); if (position->right->s==-1){printf("6 ");
+	{if(position->left !=NULL){ printf("7 "); if (position->left->s==-1){printf("8 ");
 {
 if(fromorg==1)if(position->prev!=NULL){position->prev->down=special;free(position);}
 if(fromorg==2)if(position->prev!=NULL){position->prev->left=special;free(position);}
 if(fromorg==3)if(position->prev!=NULL){position->prev->up=special;free(position);}
 if(fromorg==4)if(position->prev!=NULL){position->prev->right=special;free(position);}
 
-
+printf("UWAGA ZWOLNILEM T[0] %d, T[1] %di\n", T[0], T[1]);
 free(position);
 
-}}
+}}}}}}}}}}}}
+*/
+}
 int *way(char * input, int l, int c)
 {
         int s=0; // distance between wierzhcolki
@@ -322,7 +344,7 @@ int from; //1 up 2 right 3 down 4 left
 maze = whereP(maze, l ,c, input,T);
 T[0]=T[7]+100*T[9];
 T[1]=T[8]+100*T[9];
-if(T[0]==0){T[0]++; from =1;}
+if(T[0]==0){T[0]++; from =1;} // w tym warunku i w 3 pod nim sprawdzic czy na pewno tam jest spacja
 if(T[1]==0){T[1]++; from = 4; }
 if(T[0]==T[5]){T[0]--; from =3;}//moze byc blad ze trzeba skorzystac z load fukcji
 if(T[1]==T[6]){T[1]--;from=2;}
