@@ -117,7 +117,7 @@ T[9]=T[2];
 
 char wasvisited(structure start, structure position, structure special)
 { 
-        char rreturn;
+        char rreturn=1;
         if(position==NULL){printf("nie powinienem tu byc 19 linia w rozwiazywaniu"); return 1;}
         if(start==NULL){ return 1;}
         if(position==start) return 1;
@@ -125,10 +125,10 @@ if(position->x == start->x && position->y == start->y)
 {
 if((position->s < start->s)&&( position->s!=-1)&&(start->s!=-1)){freeafterposition(start,special);
 //Tu grzebie moze byc problem z tym
-start=NULL;
+start=special; // NULL czy special
 }
 else if ((position->s > start->s) &&(position->s !=-1)&&(start->s!=-1) ){freeafterposition(position, special);
-position=NULL;}
+position=special;}
 return 2;
 }
 else
@@ -183,7 +183,7 @@ s++;
 }
 }
 while(corridors==2&&Kon==-1);
-s++;
+//s++;
 if(Kon!=-1)
 {
         printf("ZNALAZLEM SIE W K odl wynosi %d\n",s);
@@ -217,7 +217,9 @@ if(wasvisited(tmp, position,special)!=2){
         T[0]--;
         position->up->prev = position;
         make(start, maze, input, T, 3, position->up,finish, special);
-        if(position->up->up!=NULL && position->up->up->s ==-1 && position->up->down!=NULL && position->up->down ->s ==-1 && position->up->right!=NULL &&position->up->right->s ==-1 && position->up->left!=NULL && position->up->left->s==-1){free(position->up); position->up = special; printf("OHO zwalniam T[0] = %d, T[1] = %d", T[0], T[1]);}
+        if(position->up->up!=NULL && position->up->up->s ==-1 && position->up->down!=NULL && position->up->down ->s ==-1 && position->up->right!=NULL &&position->up->right->s ==-1 && position->up->left!=NULL && position->up->left->s==-1){free(position->up); position->up = special; 
+		//printf("OHO zwalniam T[0] = %d, T[1] = %d", T[0], T[1]);
+	}
 	T[0]=position->x;
         T[1]=position->y;
         if(T[0]%100==0)
@@ -239,7 +241,9 @@ if(wasvisited(tmp, position,special)!=2){
         position->down->prev=position;
         make(start, maze, input, T, 1, position->down,finish, special);
         
-if(position->down->up!=NULL && position->down->up->s ==-1 && position->down->down!=NULL && position->down->down ->s ==-1 && position->down->right!=NULL &&position->down->right->s ==-1 && position->down->left!=NULL && position->down->left->s==-1){free(position->down); position->down = special; printf("OHO zwalniam T[0] = %d, T[1] = %d", T[0], T[1]);}
+if(position->down->up!=NULL && position->down->up->s ==-1 && position->down->down!=NULL && position->down->down ->s ==-1 && position->down->right!=NULL &&position->down->right->s ==-1 && position->down->left!=NULL && position->down->left->s==-1){free(position->down); position->down = special; 
+	//printf("OHO zwalniam T[0] = %d, T[1] = %d", T[0], T[1]);
+}
 	T[0]=position->x;
         T[1] = position->y;
         if(T[0]%100==99)
@@ -255,7 +259,9 @@ if(position->down->up!=NULL && position->down->up->s ==-1 && position->down->dow
         position->right->prev=position;
         make(start, maze, input, T,4 , position->right, finish, special);
 
-        if(position->right->up!=NULL && position->right->up->s ==-1 && position->right->down!=NULL && position->right->down ->s ==-1 && position->right->right!=NULL &&position->right->right->s ==-1 && position->right->left!=NULL && position->right->left->s==-1){free(position->right); position->right = special; printf("OHO zwalniam T[0] = %d, T[1] = %d", T[0], T[1]);}
+        if(position->right->up!=NULL && position->right->up->s ==-1 && position->right->down!=NULL && position->right->down ->s ==-1 && position->right->right!=NULL &&position->right->right->s ==-1 && position->right->left!=NULL && position->right->left->s==-1){free(position->right); position->right = special; 
+		//printf("OHO zwalniam T[0] = %d, T[1] = %d", T[0], T[1]);
+	}
 
 	T[1]=position->y;
         T[0]=position->x;
@@ -269,7 +275,9 @@ if(position->down->up!=NULL && position->down->up->s ==-1 && position->down->dow
         position->left->prev=position;
 		make(start, maze, input, T, 2, position->left, finish,special );
         
-        if(position->left->up!=NULL && position->left->up->s ==-1 && position->left->down!=NULL && position->left->down ->s ==-1 && position->left->right!=NULL &&position->left->right->s ==-1 && position->left->left!=NULL && position->left->left->s==-1){free(position->left); position->left = special; printf("OHO zwalniam T[0] = %d, T[1] = %d", T[0], T[1]);}
+        if(position->left->up!=NULL && position->left->up->s ==-1 && position->left->down!=NULL && position->left->down ->s ==-1 && position->left->right!=NULL &&position->left->right->s ==-1 && position->left->left!=NULL && position->left->left->s==-1){free(position->left); position->left = special; 
+		//printf("OHO zwalniam T[0] = %d, T[1] = %d", T[0], T[1]);
+		}
         T[1]=position->y;
         T[0]=position->x;
         }
@@ -298,7 +306,7 @@ else if(corridors==1&&Kon==-1)
                 if(position->prev!=NULL)
         position->prev->right=special;
 
-        printf("ZWALANIAM position->%d, position->%d\n",position->x, position->y);
+        //printf("ZWALANIAM position->%d, position->%d\n",position->x, position->y);
 	free(position);
 	
 }
@@ -357,7 +365,7 @@ start->prev = NULL;
 structure special = malloc(sizeof(*special)); // to differ null null when no checked special when no connection
 special->s=-1;
 special->up=NULL; special->down=NULL; special->right=NULL; special->left=NULL;
-start->s=0;
+start->s=1;
 make(start, maze, input, T, from, start, finish,special);
 printf("%d", finish->s);
 for(int i=0; i<100; i++)

@@ -5,6 +5,7 @@
 
 void freeafterposition(structure position,structure special)
 {
+	return; // narazie return sprawdzam czy to nie rozwiazuje labirynta
         if(position==NULL) return;
 if(position->up!=NULL)  if(position->up->s!=-1)freeafterposition(position->up,special);
 if(position->down!=NULL)        if(position->down->s!=-1)freeafterposition(position->down, special);
@@ -21,7 +22,7 @@ position=NULL;
 }
 void backasfarasyoucan(structure finish, int * T)
 {
-//      return;
+      return; // narazie return sprawdzam czy to ma wplyw na rozwiazanie labirynta
 structure tmp2;
         if(finish->prev==NULL) return;
 structure tmp= finish -> prev;
