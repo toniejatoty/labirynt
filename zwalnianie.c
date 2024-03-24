@@ -36,7 +36,7 @@ while(tmp->prev!=NULL && tmp->down!=NULL && tmp -> up !=NULL && tmp->right!=NULL
 }
 void delasmuch(structure finish, int *T)
 {
-//return;
+return;
         if(finish->prev==NULL){printf("nie powinno byc bledu ale w razie czego to pathfindr backasfar"); return;}
 structure tmp= finish;
 do

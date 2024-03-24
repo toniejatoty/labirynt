@@ -13,6 +13,7 @@ return mazeory;
 }
 char **load(char **maze ,char * input, int *T)
 {
+	//printf("LOAD JEST WYWOLYWANY");
         int cc=0, ll=0;
         char a;
         FILE * in = fopen(input, "r");
@@ -23,7 +24,9 @@ char **load(char **maze ,char * input, int *T)
         while(i<=opposide-1)
         {
                 a=fgetc(in);
-                if(a==EOF)return maze;
+                if(a==EOF){fprintf(stderr, "WYCHODZE PRZEZ EOF");
+			return maze;
+		}
 if(i>=from)
 {
 maze[ll%100][cc]=a;
@@ -43,7 +46,7 @@ else
         while(i<=opposide-1)
         {
                 a=fgetc(in);
-                if(a==EOF)return maze;
+                if(a==EOF){fprintf(stderr, "dasdad");return maze;}
 if(i>=from)
 {
 maze[ll%100][cc]=a;
@@ -59,6 +62,20 @@ else cc++;
 
 }
 fclose(in);
+//for(int i=0; i<100; i++)
+//for(int j=0; j<22; j++)
+//{
+//printf("%c",maze[i][j]);
+//}
+//printf("\n\n\n");
+//printf("\n\n-->%c<--",maze[4][0]);
+//printf("\n\n-->%c<--",maze[4][1]);
+//printf("Drugi i 3 wiersz wygladaja nastepujaco:");
+//for(int j=0; j<100; j++)
+//printf("%c", maze[1][j]);
+//printf("\n\n\n");
+//for(int j=0; j<100; j++)
+//printf("%c", maze[2][j]);
 return maze;
 }
 
