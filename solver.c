@@ -392,7 +392,7 @@ T[8]=-1; // wspolrzedna Py
 T[9]=0; // w ktorym segmencie jest P
 char **maze = malloc(sizeof(*maze)*100);
 for(int i=0; i<100; i++){
-        maze[i]=malloc(sizeof(**maze)*1025);
+        maze[i]=malloc(sizeof(**maze)*1026);
 }
 int from; //1 up 2 right 3 down 4 left
 //maze=load(maze, input, T);
