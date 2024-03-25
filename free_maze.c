@@ -4,7 +4,7 @@
 
 void freeafterposition(structure position, structure special)
 {
-        return; // narazie return sprawdzam czy to nie rozwiazuje labirynta
+        //return; // narazie return sprawdzam czy to nie rozwiazuje labirynta
         if (position == NULL)
                 return;
         if (position->up != NULL)
