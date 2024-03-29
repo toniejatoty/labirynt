@@ -61,7 +61,7 @@ char bledy(char *input, char a, int ktorywiersz, int ktorakolumna, int wspolrzed
 //
 int *rozmiar(char *input)
 {
-        int *T = calloc(4, sizeof(*T));
+        int *T = calloc(6, sizeof(*T));
         char a;
         int w = 0;
         int k = 0;
@@ -74,6 +74,11 @@ int *rozmiar(char *input)
         do
         {
                 a = fgetc(in);
+		if(a=='P')
+		{
+		T[4]=w;
+		T[5]=k;
+		}
                 // if(a==' '||a=='X' || a=='P' || a=='K')
                 if (a != '\n')
                         k++;
@@ -103,7 +108,9 @@ int *rozmiar(char *input)
         // T[0]--;
         // T[1]--;
         // printf("ROZMIAR WYNOSI %d --> %d", T[0], T[1]);
-        return T;
+	// T[2] T[3] do obslugi bledow
+        // T4 T5 do wspolrzednej P
+	return T;
 }
 
 char czypoprawnylab(char *input, char *aout)
@@ -186,7 +193,8 @@ char czypoprawnylab(char *input, char *aout)
                 return bledy(input, a, ktorywiersz, ktorakolumna, wspolrzednaPx, wspolrzednaPy, wspolrzednaKx, wspolrzednaKy, 7, T);
         if (wspolrzednaKx == -1)
                 return bledy(input, a, ktorywiersz, ktorakolumna, wspolrzednaPx, wspolrzednaPy, wspolrzednaKx, wspolrzednaKy, 8, T);
-
+fclose(in);
+free(T);
         return 0;
 }
 

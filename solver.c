@@ -343,14 +343,30 @@ void make(structure start, char **maze, char *input, int *T, int from, structure
         {
                 printf("ZNALAZLEM SIE W K odl wynosi %d\n", s);
                 if (s < finish->s)
-                {
+                {	
+			position->up=special;
+			position->down=special;
+			position->right=special;
+			position->left=special;
+			if(Kon==1) position->up=finish;
+			if(Kon==2) position->right=finish;
+			if(Kon==3)position->down=finish;
+			if(Kon==4)position->left=finish;
+			
+			if(finish->s != INT_MAX)
+			{
+		//	freeasmuchasyoucan(finish);
+			}
                        // backasfarasyoucan(finish, T);
                         finish->s = s;
                         finish->prev = position;
-                }
+                	finish->x = T[0];
+			finish->y = T[1];
+		
+		}
                 else
                 {
-                       // delasmuch(position, T);
+                 ;      // delasmuch(position, T);
                 }
         }
         if (corridors >= 3 && Kon == -1)
@@ -573,7 +589,7 @@ void make(structure start, char **maze, char *input, int *T, int from, structure
                 position = NULL;
         }
 }
-int *way(char *input, int l, int c)
+structure way(char *input, int l, int c)
 {
         int s = 0; // distance between wierzhcolki
         int *T = malloc(sizeof(*T) * 10);
@@ -590,10 +606,9 @@ int *way(char *input, int l, int c)
         char **maze = malloc(sizeof(*maze) * 100);
         for (int i = 0; i < 100; i++)
         {
-                maze[i] = malloc(sizeof(**maze) * 1026);
+                maze[i] = malloc(sizeof(**maze) * 1025);
         }
         int from; // 1 up 2 right 3 down 4 left
-        // maze=load(maze, input, T);
         maze = whereP(maze, l, c, input, T);
         T[0] = T[7] + 100 * T[9];
         T[1] = T[8] + 100 * T[9];
@@ -630,12 +645,22 @@ int *way(char *input, int l, int c)
         special->right = NULL;
         special->left = NULL;
         start->s = 1;
-
-        make(start, maze, input, T, from, start, finish, special);
-        printf("%d", finish->s);
-        for (int i = 0; i < 100; i++)
+	finish->up=special;
+		finish->down=special;
+	finish->left=special;
+	finish->right=special;
+     make(start, maze, input, T, from, start, finish, special);
+        
+	printf("%d", finish->s);
+        if(finish->s == INT_MAX ){ printf("znaczy sie ze nie ma rozwiazania labirynt nie ma polaczenia od P do K"); }
+	for (int i = 0; i < 100; i++)
                 free(maze[i]);
-        free(maze);
-        return T;
+        
+	free(maze);
+	free(T);
+        start->prev = special;
+
+	special->prev = finish;
+	return start;
 }
 

@@ -2,6 +2,21 @@
 #include <stdlib.h>
 #include "free_maze.h"
 
+void freeasmuchasyoucan(structure finish)
+{
+char corridors = 60;//char needs 1B int needs 4B, when i declare char corridors=0; and corridors ++; corridors have value like 1 '001' and this '001' dont influence well on program
+if(finish->prev->up->s!=-1)corridors++;
+if(finish->prev->down->s!=-1)corridors++;
+if(finish->prev->right->s!=-1)corridors++;
+if(finish->prev->left->s!=-1)corridors++;
+if(corridors ==60)
+{
+freeasmuchasyoucan(finish->prev);
+free(finish);
+}
+}
+
+
 void freeafterposition(structure position, structure special)
 {
         //return; // narazie return sprawdzam czy to nie rozwiazuje labirynta

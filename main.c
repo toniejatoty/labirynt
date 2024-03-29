@@ -5,13 +5,25 @@
 #include <string.h>
 #include "help.h"
 #include "reader.h"
+#include "structure.h"
+void freee(structure position)
+{
+if(position->up!=NULL && position->up->s!=-1){printf("UP ");}
+if(position->down!=NULL && position->down->s!=-1){printf("DOWN ");}
+if(position->right!=NULL && position->right->s!=-1){printf("RIGHT ");}
+if(position->left!=NULL && position->left->s!=-1){printf("LEFT ");}
+printf("--------\n");
+
+if(position->up!=NULL && position->up->s!=-1){freee(position->up);}
+if(position->down!=NULL && position->down->s!=-1){freee(position->down);}
+if(position->right!=NULL && position->right->s!=-1){freee(position->right);}
+if(position->left!=NULL && position->left->s!=-1){freee(position->left);}
+free(position);
+}
 int main(int argc, char ** argv)
 {
 int opt;
-char h=0;
-char czybylom=0;
-char *zpliku = NULL;
-char * dopliku = NULL;
+char h=0; char czybylom=0; char *zpliku = NULL; FILE * out=stdout; char * dopliku = NULL;
 while((opt=getopt(argc, argv, "m:o:h"))!=-1){
 	switch(opt)
 	{
@@ -21,6 +33,7 @@ while((opt=getopt(argc, argv, "m:o:h"))!=-1){
 		break; 
 	case 'o':
 		dopliku=strdup(optarg);
+		out = fopen(optarg, "w");
 		break;  
 	case 'h':
 	if(optarg == NULL|| strcmp(optarg, "")==0)	
@@ -30,7 +43,8 @@ while((opt=getopt(argc, argv, "m:o:h"))!=-1){
 	default:
 	//printf("wychodze defaultem");
 	break;
-	}}
+	}
+}
 if(h==4)
 	{
 	help();
@@ -42,11 +56,6 @@ if(czybylom == 0 )
 	//+ instrukcja?
 	return 1;
 }
-//
-//
-//
-//
-//
 FILE * intest  =fopen(zpliku, "r");
 if(intest==NULL)
 {
@@ -55,22 +64,36 @@ free(zpliku);
 return 1;
 }
 fclose(intest);
+if(out ==NULL)
+{
+fprintf(stderr,"Program nie posiada uprawnień do zapisania w podanym pliku rozwiązania %s",dopliku );
+free(zpliku);
+return 1;
+}
 if((czypoprawnylab(zpliku,argv[0]))!=0)
 {
 free(zpliku);
 return 1;
 //BYc moze tutaj eszcze cos zwolnic
 }
-char a;
 
-FILE *in = fopen(zpliku, "r");
-int *T = malloc(sizeof(*T)*4);
+int *T;
 T=rozmiar(zpliku);
-int *o;
-o= way( zpliku, T[0], T[1] );
+structure start =way( zpliku, T[0], T[1] );
 printf("sukcess");
-fclose(in);
+if(dopliku!=NULL)free(dopliku);
+structure special = start->prev;
+structure finish = special->prev;
+T[2] = start->x;
+T[3] = start->y;
+fprintf(out, "START\n");
+save(out, zpliku, T,start, maze);
+fprintf(out, "STOP");
 free(zpliku);
+free(T);
+freee(start);
+//free(finish) nie rozumiem czemu jak to sie odblokuje to nie stwarza to bledow finish jest usuwane w freee a mimo ze jak jest odkomentowane to bledow nie robi aplikacja do badania pamieci pokazuje ze i z tym zakomentowanym i bez tego nie wplywa to na dzialanie programu
+free(special);
+fclose(out);
 return 0;
-
 }
