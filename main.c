@@ -82,6 +82,7 @@ return 1;
 
 int *T;
 T=rozmiar(zpliku);
+//printf("-------(%d, %d,%d, %d, %d, %d, %d, %d,%d, %d )-------",T[0],T[1],T[2], T[3],T[4], T[5], T[6], T[7], T[8], T[9]);
 structure start =way( zpliku, T[0], T[1] );
 printf("sukcess");
 if(dopliku!=NULL)free(dopliku);
@@ -94,7 +95,7 @@ char ** maze = malloc(sizeof(*maze ) * T[7]);
 for(int i=0; i<T[7]; i++)
 maze[i] = malloc(sizeof(**maze)* 1025);
 maze = load2(maze, zpliku, T );
-save(out, zpliku, T, start, maze, 1);
+go_start_first_vertex(out, zpliku,T,start,maze);
 fprintf(out, "STOP");
 free(zpliku);
 for(int i=0; i<T[7]; i++)
