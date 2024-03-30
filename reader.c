@@ -61,7 +61,7 @@ char bledy(char *input, char a, int ktorywiersz, int ktorakolumna, int wspolrzed
 //
 int *rozmiar(char *input)
 {
-        int *T = calloc(6, sizeof(*T));
+        int *T = calloc(10, sizeof(*T));
         char a;
         int w = 0;
         int k = 0;
@@ -108,8 +108,16 @@ int *rozmiar(char *input)
         // T[0]--;
         // T[1]--;
         // printf("ROZMIAR WYNOSI %d --> %d", T[0], T[1]);
-	// T[2] T[3] do obslugi bledow
+	// T[2] T[3] do obslugi bledow i do aktualnej pozycji gdzie sie znajduje
         // T4 T5 do wspolrzednej P
+	// T6 w ktorym segmencie sie znajduje
+	// T7 ile max wierszy jest w segmencie
+	// T8 ile jest linii w ostatnim segmencie
+	// T9 ile jest segmentow
+	T[6] = 0;
+	T[7]=100;
+	T[8] = T[0]%T[7];
+	T[9] = T[0]/T[7];
 	return T;
 }
 

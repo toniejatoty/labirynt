@@ -1,6 +1,22 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "free_maze.h"
+void deletenotused(structure finish, structure special)
+{
+if(finish!=NULL&&finish->prev!=NULL && finish->prev->s!=-1)
+{
+if(finish->prev->up!=NULL && finish->prev->up->s!=-1 && finish->prev->up!=finish)
+	freeafterposition(finish->prev->up, special);
+
+if(finish->prev->right!=NULL && finish->prev->right->s!=-1 && finish->prev->right!=finish)
+	freeafterposition(finish->prev->right, special);
+if(finish->prev->down!=NULL && finish->prev->down->s!=-1 && finish->prev->down!=finish)
+	freeafterposition(finish->prev->down, special);
+if(finish->prev->left!=NULL && finish->prev->left->s!=-1 && finish->prev->left!=finish)
+	freeafterposition(finish->prev->left, special);
+deletenotused(finish->prev, special);
+}
+}
 
 void freeasmuchasyoucan(structure finish)
 {
@@ -47,7 +63,7 @@ void freeafterposition(structure position, structure special)
                 if (position->prev->left == position)
                         position->prev->left = special;
 
-        printf("UWAGA ZWALNIAM POSITION x--> %d y --> %d s-->%d\n", position->x, position->y, position->s);
+//        printf("UWAGA ZWALNIAM POSITION x--> %d y --> %d s-->%d\n", position->x, position->y, position->s);
         free(position);
         position = NULL;
 }

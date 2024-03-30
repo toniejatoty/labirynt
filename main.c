@@ -6,8 +6,11 @@
 #include "help.h"
 #include "reader.h"
 #include "structure.h"
+#include "switch_writer.h"
+#include "writer.h"
 void freee(structure position)
 {
+
 if(position->up!=NULL && position->up->s!=-1){printf("UP ");}
 if(position->down!=NULL && position->down->s!=-1){printf("DOWN ");}
 if(position->right!=NULL && position->right->s!=-1){printf("RIGHT ");}
@@ -86,10 +89,17 @@ structure special = start->prev;
 structure finish = special->prev;
 T[2] = start->x;
 T[3] = start->y;
-fprintf(out, "START\n");
-save(out, zpliku, T,start, maze);
+fprintf(out, "\nSTART\n");
+char ** maze = malloc(sizeof(*maze ) * T[7]);
+for(int i=0; i<T[7]; i++)
+maze[i] = malloc(sizeof(**maze)* 1025);
+maze = load2(maze, zpliku, T );
+save(out, zpliku, T, start, maze);
 fprintf(out, "STOP");
 free(zpliku);
+for(int i=0; i<T[7]; i++)
+free(maze[i]);
+free(maze);
 free(T);
 freee(start);
 //free(finish) nie rozumiem czemu jak to sie odblokuje to nie stwarza to bledow finish jest usuwane w freee a mimo ze jak jest odkomentowane to bledow nie robi aplikacja do badania pamieci pokazuje ze i z tym zakomentowanym i bez tego nie wplywa to na dzialanie programu
@@ -97,3 +107,5 @@ free(special);
 fclose(out);
 return 0;
 }
+
+// Trzeba sprawdzic w tym readerze czy P jest w pierwszym segmencie

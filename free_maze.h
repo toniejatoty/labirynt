@@ -3,4 +3,5 @@
 #include "structure.h"
 void freeafterposition(structure position,structure special);
 void freeasmuchasyoucan(structure finish);
+void deletenotused(structure finish, structure special);
 #endif

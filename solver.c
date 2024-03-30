@@ -150,7 +150,7 @@ char wasvisited(structure start, structure position, structure special)
                 return 1;
         if (position->x == start->x && position->y == start->y)
         {
-                if ((position->s < start->s) && (position->s != -1) && (start->s != -1))
+                if ((position->s <= start->s) && (position->s != -1) && (start->s != -1))
                 {
                         if (start->prev->up != NULL && start->prev->up == start)
                                 start->prev->up = special;
@@ -342,33 +342,38 @@ void make(structure start, char **maze, char *input, int *T, int from, structure
         if (Kon != -1)
         {
                 printf("ZNALAZLEM SIE W K odl wynosi %d\n", s);
-                if (s < finish->s)
-                {	
-			position->up=special;
-			position->down=special;
-			position->right=special;
-			position->left=special;
-			if(Kon==1) position->up=finish;
-			if(Kon==2) position->right=finish;
-			if(Kon==3)position->down=finish;
-			if(Kon==4)position->left=finish;
+           structure abc = finish;
+	   while(abc!=NULL && abc->s!=-1){fprintf(stderr,"(%d,%d)-->",abc->x, abc->y); abc=abc->prev;}
+	   printf("\n");
+	    	if (s < finish->s){
+			if(position->prev->up != NULL && position->prev->up==position){position->prev->up=finish;}
+			else if(position->prev->down != NULL && position->prev->down==position){position->prev->down=finish;}
+		else if(position->prev->right != NULL && position->prev->right==position){position->prev->right=finish;}
+		else if(position->prev->left != NULL && position->prev->left==position){position->prev->left=finish; }
+		finish->prev = position->prev;
+		free(position);	
+			if(Kon==1)finish->up=NULL; //NULL will determine on which derectory is K
+			if(Kon==2) finish->right = NULL;
+			if(Kon==3) finish->down = NULL;
+			if(Kon==4)finish->left=NULL;
 			
 			if(finish->s != INT_MAX)
 			{
 		//	freeasmuchasyoucan(finish);
 			}
-                       // backasfarasyoucan(finish, T);
                         finish->s = s;
-                        finish->prev = position;
                 	finish->x = T[0];
 			finish->y = T[1];
-		
 		}
                 else
                 {
                  ;      // delasmuch(position, T);
                 }
-        }
+      	abc = finish;
+
+		while(abc!=NULL && abc->s!=-1){printf("(%d,%d)-->",abc->x, abc->y); abc=abc->prev;}
+	  	 printf("\n");
+       	}
         if (corridors >= 3 && Kon == -1)
         {
                 position->s = s;
@@ -661,6 +666,7 @@ structure way(char *input, int l, int c)
         start->prev = special;
 
 	special->prev = finish;
+deletenotused(finish,special);
 	return start;
 }
 
