@@ -1,4 +1,5 @@
 #include "writer.h"
+#include "switch_writer.h"
 #include "structure.h"
 void writewheretogo(int fromorg, int director, FILE *out)
 {if(director==1){
@@ -50,27 +51,70 @@ void gofromvertextovertex(char ** maze, FILE * out, char * in, int *T,int fromor
 	from = fromorg;
 	int Kon=-1;
 	do
-		{ corridors=0;
+		{
+		while (T[2] / T[7] != T[6])
+                {
+                        if (T[2] / T[7] < T[6])
+                        {
+                                T[6]--;
+                               maze= load2(maze, in, T);
+                        }
+                        else if (T[2] / T[7] > T[6])
+                        {
+                                T[6]++;
+                                maze = load2(maze, in, T);
+                        }
+                }       
+			corridors=0;
 			up=0; down=0; right=0; left=0;
-			if(maze[T[2]-1][T[3]]=='P'||maze[T[2]-1][T[3]]==' '||maze[T[2]-1][T[3]]=='K' ){
+			
+			//up	
+			if(T[0]%T[7]==0)
+			{
+			T[6]--;
+			maze=load2(maze,in,T);
+			}
+						
+			if(maze[(T[2]-1)%T[7]][T[3]]=='P'||maze[(T[2]-1)%T[7]][T[3]]==' '||maze[(T[2]-1)%T[7]][T[3]]=='K' ){
 			corridors ++;
 			up=1;
-			if(maze[T[2]-1][T[3]]=='K')Kon=1;
+			if(maze[(T[2]-1)%T[7]][T[3]]=='K')Kon=1;
 			}
-			if( maze[T[2]+1][T[3]]=='P'||maze[T[2]+1][T[3]]==' ' || maze[T[2]+1][T[3]]=='K'){
+			if(T[0]%T[7]==0)
+			{
+			T[6]++;
+			maze=load2(maze,in, T);
+			}
+			//up
+
+			
+			//down
+			if(T[2]%T[7]==T[7]-1)
+			{
+				T[6]++;
+				maze=load2(maze,in, T);
+			}
+			if( maze[(T[2]+1)%T[7]][T[3]]=='P'||maze[(T[2]+1)%T[7]][T[3]]==' ' || maze[(T[2]+1)%T[7]][T[3]]=='K'){
 			corridors ++;
 			down=1;
-			if(maze[T[2]+1][T[3]]=='K')Kon=3;
+			if(maze[(T[2]+1)%T[7]][T[3]]=='K')Kon=3;
 			}
-			if( maze[T[2]][T[3]+1]=='P'||maze[T[2]][T[3]+1]==' '|| maze[T[2]][T[3]+1]=='K'){
+if(T[2]%T[7]==T[7]-1)
+{
+T[6]--;
+maze=load2(maze,in, T);
+}
+
+			//down
+			if( maze[(T[2])%T[7]][T[3]+1]=='P'||maze[T[2]%T[7]][T[3]+1]==' '|| maze[T[2]%T[7]][T[3]+1]=='K'){
 			corridors ++;
 			right=1;
-		       if(maze[T[2]][T[3]+1]=='K')Kon=2;
+		       if(maze[T[2]%T[7]][T[3]+1]=='K')Kon=2;
 			}
-			if(maze[T[2]][T[3]-1]=='P'|| maze[T[2]][T[3]-1]==' '||maze[T[2]][T[3]-1]=='K'){
+			if(maze[T[2]%T[7]][T[3]-1]=='P'|| maze[T[2]%T[7]][T[3]-1]==' '||maze[T[2]%T[7]][T[3]-1]=='K'){
 			corridors ++;
 			left=1;
-			if(maze[T[2]][T[3]-1]=='K')
+			if(maze[T[2]%T[7]][T[3]-1]=='K')
 			Kon=4;
 			}
 

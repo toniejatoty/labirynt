@@ -150,13 +150,13 @@ char wasvisited(structure start, structure position, structure special)
                 return 1;
         if (position->x == start->x && position->y == start->y)
         {
-                if ((position->s < start->s) && (position->s != -1) && (start->s != -1))
-                {
-                        if (start->prev->up != NULL && start->prev->up == start)
-                                start->prev->up = special;
-                        if (start->prev->right != NULL && start->prev->right == start)
-                                start->prev->right = special;
-                        if (start->prev->down != NULL && start->prev->down == start)
+		if ((position->s < start->s) && (position->s != -1) && (start->s != -1))
+		{
+			if (start->prev->up != NULL && start->prev->up == start)
+				start->prev->up = special;
+			if (start->prev->right != NULL && start->prev->right == start)
+				start->prev->right = special;
+			if (start->prev->down != NULL && start->prev->down == start)
                                 start->prev->down = special;
                         if (start->prev->left != NULL && start->prev->left == start)
                                 start->prev->left = special;
