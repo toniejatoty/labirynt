@@ -1,40 +1,52 @@
 #include "writer.h"
 #include "structure.h"
+void writewheretogo(int fromorg, int director, FILE *out)
+{if(director==1){
+	if(fromorg==2) fprintf(out,"TURN RIGHT\n" );
+	else if(fromorg==4) fprintf(out,"TURN LEFT\n" );
+	return;
+		}
+if(director==3)
+{	if(fromorg==2) fprintf(out,"TURN LEFT\n" );
+	else if(fromorg==4) fprintf(out,"TURN RIGHT\n" );
+return;
+}
+if(director==2)
+{
+	if(fromorg==1) fprintf(out,"TURN LEFT\n" );
+	else if(fromorg==3) fprintf(out,"TURN RIGHT\n" );
+	return;
+}
+if(director==4)
+{if(fromorg==1) fprintf(out,"TURN RIGHT\n" );
+	else if(fromorg==3) fprintf(out,"TURN LEFT\n" );
+return;
+}
+
+}
 int wheretogo(structure start, int fromorg,FILE * out, int *T)
 {
 	if(start->up!=NULL && start->up->s!=-1)
 	{
-	if(fromorg==2) fprintf(out,"TURN RIGHT\n" );
-	else if(fromorg==4) fprintf(out,"TURN LEFT\n" );
-//	T[2]--;
 	return 1;
 	}
 	else if(start->down!=NULL && start->down->s!=-1)
 	{
-	if(fromorg==2) fprintf(out,"TURN LEFT\n" );
-	else if(fromorg==4) fprintf(out,"TURN RIGHT\n" );
-//	T[2]++;
 	return 3;
 	}
 	else if(start->right!=NULL && start->right->s!=-1)
 	{
-	if(fromorg==1) fprintf(out,"TURN LEFT\n" );
-	else if(fromorg==3) fprintf(out,"TURN RIGHT\n" );
-//	T[3]++;
 	return 2;
 	}
 	else if(start->left!=NULL && start->left->s!=-1)
 	{
-	if(fromorg==1) fprintf(out,"TURN RIGHT\n" );
-	else if(fromorg==3) fprintf(out,"TURN LEFT\n" );
-//	T[3]--;
 	return 4;
 	}
 
 
 }
-void gofromvertextovertex(char ** maze, FILE * out, char * in, int *T,int fromorg,structure start )
-{int corridors = 0,director =0, count = 1,up=0,down=0,right=0,left=0, from=0;//from 1- up 2- right 3- down 4-left
+void gofromvertextovertex(char ** maze, FILE * out, char * in, int *T,int fromorg,structure start, int count )
+{int corridors = 0,director =0,up=0,down=0,right=0,left=0, from=0;//from 1- up 2- right 3- down 4-left
 	from = fromorg;
 	do
 		{ corridors=0;
@@ -85,11 +97,22 @@ void gofromvertextovertex(char ** maze, FILE * out, char * in, int *T,int fromor
 	while(corridors==2);
 		if(corridors >=3)
 		{
-			fprintf(out, "FORWARD %d\n", count);
+			//fprintf(out, "FORWARD %d\n", count);
 	director=wheretogo(start,fromorg,out, T);//where i head 1 up 2 right 3 down 4 left
+		if(director%2 != from%2){
+			fprintf(out, "FORWARD %d\n", count);
+
+		writewheretogo(fromorg,director,out);
+		count=1;
 		}
-		else if(corridors ==1) return;
-save(out, in , T, start, maze);
+		else {count ++;}
+		}
+		else if(corridors ==1) 
+		{
+		fprintf(out,"FORWARD %d\n", count);	
+		return;
+		}
+save(out, in , T, start, maze,count);
 	/*if(director==1)
 save(out, in,T,start->up, maze);
 
@@ -117,30 +140,30 @@ void changedirector(int from, int fromorg, FILE * out,int *T)
 		
 }
 //T 0 1 - size 2,3 actual posiiton 4,5 P position
-void save(FILE *out,char * in, int *T, structure start, char ** maze) {
-	int corridors = 0, count = 1,fromorg=0, from=0;//from 1- up 2- right 3- down 4-left
+void save(FILE *out,char * in, int *T, structure start, char ** maze, int count) {
+	int corridors = 0,fromorg=0, from=0;//from 1- up 2- right 3- down 4-left
 	if(start->up!=NULL && start->up->s!=-1)
 	{
 		from = 3, fromorg=3;
 		T[2]--; 
-	gofromvertextovertex(maze,out,in,T,fromorg,start->up);	
+	gofromvertextovertex(maze,out,in,T,fromorg,start->up, count);	
 	}
 	else if(start->down!=NULL && start->down->s!=-1)
 	{
 		T[2] ++;
 	from = 1, fromorg=1;
-	gofromvertextovertex(maze,out,in,T,fromorg,start->down);	
+	gofromvertextovertex(maze,out,in,T,fromorg,start->down, count);	
 	}
 	else if(start->right!=NULL && start->right->s!=-1)
 	{
 		T[3]++;
 	from = 4, fromorg=4;
-	gofromvertextovertex(maze,out,in,T,fromorg,start->right);	
+	gofromvertextovertex(maze,out,in,T,fromorg,start->right, count);	
 	}
 	else if(start->left!=NULL && start->left->s!=-1)
 	{
 		T[3]--;
 	from = 2, fromorg=2;
-	gofromvertextovertex(maze,out,in,T,fromorg, start->left);	
+	gofromvertextovertex(maze,out,in,T,fromorg, start->left, count);	
 	}
 }

@@ -94,7 +94,7 @@ char ** maze = malloc(sizeof(*maze ) * T[7]);
 for(int i=0; i<T[7]; i++)
 maze[i] = malloc(sizeof(**maze)* 1025);
 maze = load2(maze, zpliku, T );
-save(out, zpliku, T, start, maze);
+save(out, zpliku, T, start, maze, 1);
 fprintf(out, "STOP");
 free(zpliku);
 for(int i=0; i<T[7]; i++)
