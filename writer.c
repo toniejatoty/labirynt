@@ -119,7 +119,31 @@ void gofromvertextovertex(char ** maze, FILE * out, char * in, int *T,int fromor
 		return;
 		}
 	if(Kon!=-1)
-	{ fprintf(out, "FORWARD %d\n", count);
+	{
+	switch(Kon){
+		case 1: 
+	if(from ==3 ){fprintf(out, "FORWARD %d\n", count+1);}
+	else if(from==2){ fprintf(out, "FORWARD %d\nTURN RIGHT\nFORWARD 1\n",count );}
+	else if(from==4){fprintf(out, "FORWARD %d\nTURN LEFT\nFORWARD 1\n", count);}
+	break;
+		case 2: 
+	if(from ==4 ){fprintf(out, "FORWARD %d\n", count+1);}
+	else if(from==3){ fprintf(out, "FORWARD %d\nTURN RIGHT\nFORWARD 1\n",count );}
+	else if(from==1){fprintf(out, "FORWARD %d\nTURN LEFT\nFORWARD 1\n", count);}
+	break;
+
+		case 3: 
+	if(from ==1 ){fprintf(out, "FORWARD %d\n", count+1);}
+	else if(from==4){ fprintf(out, "FORWARD %d\nTURN RIGHT \nFORWARD 1\n",count );}
+	else if(from==2){fprintf(out, "FORWARD %d\nTURN LEFT \nFORWARD 1\n", count);}
+	break;
+
+		case 4 : 
+	if(from ==2 ){fprintf(out, "FORWARD %d\n", count+1);}
+	else if(from==3){ fprintf(out, "FORWARD %d\nTURN RIGHT \nFORWARD 1\n",count );}
+	else if(from==1){fprintf(out, "FORWARD %d\nTURN LEFT \nFORWARD 1\n", count);}
+	break;
+		default: return;}
 return;	
 	}
 save(out, in , T, start, maze,count);
@@ -188,5 +212,5 @@ void go_start_first_vertex(FILE *out, char * in, int *T, structure start, char *
 	else {fromorg=3; T[2]--;}
 	int count =1;
 gofromvertextovertex(maze, out, in,T,fromorg,start,count );
-save(out, in, T, start, maze, 1);
+//save(out, in, T, start, maze, 1);
 }
