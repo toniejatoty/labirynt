@@ -48,27 +48,33 @@ int wheretogo(structure start, int fromorg,FILE * out, int *T)
 void gofromvertextovertex(char ** maze, FILE * out, char * in, int *T,int fromorg,structure start, int count )
 {int corridors = 0,director =0,up=0,down=0,right=0,left=0, from=0;//from 1- up 2- right 3- down 4-left
 	from = fromorg;
+	int Kon=-1;
 	do
 		{ corridors=0;
 			up=0; down=0; right=0; left=0;
 			if(maze[T[2]-1][T[3]]==' '||maze[T[2]-1][T[3]]=='K' ){
 			corridors ++;
 			up=1;
+			if(maze[T[2]-1][T[3]]=='K')Kon=1;
 			}
 			if(maze[T[2]+1][T[3]]==' ' || maze[T[2]+1][T[3]]=='K'){
 			corridors ++;
 			down=1;
+			if(maze[T[2]+1][T[3]]=='K')Kon=3;
 			}
 			if(maze[T[2]][T[3]+1]==' '|| maze[T[2]][T[3]+1]=='K'){
 			corridors ++;
 			right=1;
+		       if(maze[T[2]][T[3]+1]=='K')Kon=2;
 			}
 			if(maze[T[2]][T[3]-1]==' '||maze[T[2]][T[3]-1]=='K'){
 			corridors ++;
 			left=1;
+			if(maze[T[2]][T[3]-1]=='K')
+			Kon=4;
 			}
 
-		if(corridors ==2 ){
+		if(corridors ==2&&Kon==-1 ){
 			if(from ==1)
 			from= down==1? 1: right==1? 4:2;
 			else if(from ==2)
@@ -94,8 +100,8 @@ void gofromvertextovertex(char ** maze, FILE * out, char * in, int *T,int fromor
 		count =1;
 		}
 		}}
-	while(corridors==2);
-		if(corridors >=3)
+	while(corridors==2&& Kon==-1);
+		if(corridors >=3 && Kon==-1)
 		{
 			//fprintf(out, "FORWARD %d\n", count);
 	director=wheretogo(start,fromorg,out, T);//where i head 1 up 2 right 3 down 4 left
@@ -107,11 +113,15 @@ void gofromvertextovertex(char ** maze, FILE * out, char * in, int *T,int fromor
 		}
 		else {count ++;}
 		}
-		else if(corridors ==1) 
+		else if(corridors ==1&& Kon==-1) 
 		{
 		fprintf(out,"FORWARD %d\n", count);	
 		return;
 		}
+	if(Kon!=-1)
+	{ fprintf(out, "FORWARD %d\n", count);
+return;	
+	}
 save(out, in , T, start, maze,count);
 	/*if(director==1)
 save(out, in,T,start->up, maze);
