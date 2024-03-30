@@ -10,13 +10,13 @@
 #include "writer.h"
 void freee(structure position)
 {
-
+/*
 if(position->up!=NULL && position->up->s!=-1){printf("UP ");}
 if(position->down!=NULL && position->down->s!=-1){printf("DOWN ");}
 if(position->right!=NULL && position->right->s!=-1){printf("RIGHT ");}
 if(position->left!=NULL && position->left->s!=-1){printf("LEFT ");}
 printf("--------\n");
-
+*/
 if(position->up!=NULL && position->up->s!=-1){freee(position->up);}
 if(position->down!=NULL && position->down->s!=-1){freee(position->down);}
 if(position->right!=NULL && position->right->s!=-1){freee(position->right);}

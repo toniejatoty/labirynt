@@ -342,10 +342,11 @@ void make(structure start, char **maze, char *input, int *T, int from, structure
         if (Kon != -1)
         {
                 printf("ZNALAZLEM SIE W K odl wynosi %d\n", s);
-           structure abc = finish;
+           /*structure abc = finish;
 	   while(abc!=NULL && abc->s!=-1){fprintf(stderr,"(%d,%d)-->",abc->x, abc->y); abc=abc->prev;}
 	   printf("\n");
-	    	if (s < finish->s){
+*/	    
+   	   if (s < finish->s){
 			if(position->prev->up != NULL && position->prev->up==position){position->prev->up=finish;}
 			else if(position->prev->down != NULL && position->prev->down==position){position->prev->down=finish;}
 		else if(position->prev->right != NULL && position->prev->right==position){position->prev->right=finish;}
@@ -369,11 +370,12 @@ void make(structure start, char **maze, char *input, int *T, int from, structure
                 {
                  ;      // delasmuch(position, T);
                 }
-      	abc = finish;
+/*      	abc = finish;
 
 		while(abc!=NULL && abc->s!=-1){printf("(%d,%d)-->",abc->x, abc->y); abc=abc->prev;}
 	  	 printf("\n");
-       	}
+  */
+	 	 }
         if (corridors >= 3 && Kon == -1)
         {
                 position->s = s;

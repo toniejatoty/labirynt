@@ -89,7 +89,8 @@ void gofromvertextovertex(char ** maze, FILE * out, char * in, int *T,int fromor
 	director=wheretogo(start,fromorg,out, T);//where i head 1 up 2 right 3 down 4 left
 		}
 		else if(corridors ==1) return;
-if(director==1)
+save(out, in , T, start, maze);
+	/*if(director==1)
 save(out, in,T,start->up, maze);
 
 	else if(director==2)
@@ -100,7 +101,7 @@ save(out, in,T,start->down, maze);
 
 	else if(director==4)
 save(out, in,T,start->left,maze);
-
+*/
 
 }
 void changedirector(int from, int fromorg, FILE * out,int *T)
