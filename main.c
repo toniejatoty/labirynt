@@ -84,7 +84,7 @@ int *T;
 T=rozmiar(zpliku);
 //printf("-------(%d, %d,%d, %d, %d, %d, %d, %d,%d, %d )-------",T[0],T[1],T[2], T[3],T[4], T[5], T[6], T[7], T[8], T[9]);
 structure start =way( zpliku, T[0], T[1] );
-printf("sukcess");
+//printf("sukcess");
 if(dopliku!=NULL)free(dopliku);
 structure special = start->prev;
 structure finish = special->prev;

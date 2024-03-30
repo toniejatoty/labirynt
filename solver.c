@@ -150,7 +150,7 @@ char wasvisited(structure start, structure position, structure special)
                 return 1;
         if (position->x == start->x && position->y == start->y)
         {
-                if ((position->s <= start->s) && (position->s != -1) && (start->s != -1))
+                if ((position->s < start->s) && (position->s != -1) && (start->s != -1))
                 {
                         if (start->prev->up != NULL && start->prev->up == start)
                                 start->prev->up = special;
@@ -341,7 +341,7 @@ void make(structure start, char **maze, char *input, int *T, int from, structure
         // s++;
         if (Kon != -1)
         {
-                printf("ZNALAZLEM SIE W K odl wynosi %d\n", s);
+                //printf("ZNALAZLEM SIE W K odl wynosi %d\n", s);
            /*structure abc = finish;
 	   while(abc!=NULL && abc->s!=-1){fprintf(stderr,"(%d,%d)-->",abc->x, abc->y); abc=abc->prev;}
 	   printf("\n");
@@ -658,7 +658,12 @@ structure way(char *input, int l, int c)
 	finish->right=special;
      make(start, maze, input, T, from, start, finish, special);
         
-	printf("%d", finish->s);
+	printf("ODLEGLOSC WYNOSI: %d", finish->s);
+	printf("\n DROGA TO:\n");
+	structure abc = finish;
+	while(abc->prev!=NULL &&abc->prev->s!=-1)
+	{printf("(%d, %d)->",abc->x, abc->y); abc=abc->prev;}
+	printf("%d, %d",abc->x, abc->y);
         if(finish->s == INT_MAX ){ printf("znaczy sie ze nie ma rozwiazania labirynt nie ma polaczenia od P do K"); }
 	for (int i = 0; i < 100; i++)
                 free(maze[i]);
