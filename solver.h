@@ -3,7 +3,7 @@
 #include <stdio.h>
 #include "structure.h"
 char **whereP(char ** maze, int l, int c, char * input, int *T);
-char wasvisited(structure start, structure position, structure special);
+char wasvisited(structure start, structure position, structure special,structure finish);
 void make(structure start, char ** maze, char * input, int *T, int from, structure position, structure finish, structure special);
 structure way(char * input, int l, int c);
 

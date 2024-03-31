@@ -9,8 +9,8 @@ char **load(char **maze, char *input, int *T)
         int i = 0;
         if (T[2] != T[3])
         {
-                int opposide = 100 * T[6] * (T[2] + 1) + (100 * (T[2] + 1));
-                int from = 100 * T[6] * T[2] + (100 * T[2]);
+                int opposide = T[10] * T[6] * (T[2] + 1) + (T[10] * (T[2] + 1));
+                int from = T[10] * T[6] * T[2] + (T[10] * T[2]);
                 while (i <= opposide - 1)
                 {
                         a = fgetc(in);
@@ -21,7 +21,7 @@ char **load(char **maze, char *input, int *T)
                         }
                         if (i >= from)
                         {
-                                maze[ll % 100][cc] = a;
+                                maze[ll % T[10]][cc] = a;
                         }
                         if (a == '\n')
                         {
@@ -35,8 +35,8 @@ char **load(char **maze, char *input, int *T)
         }
         else
         {
-                int opposide = (100 * (T[2]) + T[4]) * T[6] + (100 * (T[2]) + T[4]);
-                int from = 100 * T[6] * T[2] + (100 * T[2]);
+                int opposide = (T[10]* (T[2]) + T[4]) * T[6] + (T[10] * (T[2]) + T[4]);
+                int from = T[10] * T[6] * T[2] + (T[10] * T[2]);
                 while (i <= opposide - 1)
                 {
                         a = fgetc(in);
@@ -47,7 +47,7 @@ char **load(char **maze, char *input, int *T)
                         }
                         if (i >= from)
                         {
-                                maze[ll % 100][cc] = a;
+                                maze[ll % T[10]][cc] = a;
                         }
                         if (a == '\n')
                         {

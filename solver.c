@@ -60,7 +60,7 @@ char **whereP(char **maze, int l, int c, char *input, int *T)
                                         T[8] = i;
                                 }
                         }
-                        for (int j = 0; j < 100; j++)
+                        for (int j = 0; j < T[10]; j++)
                         {
                                 if (maze[j][0] == 'P')
                                 {
@@ -105,7 +105,7 @@ char **whereP(char **maze, int l, int c, char *input, int *T)
                 }
                 else if (T[2] != T[3])
                 {
-                        for (int j = 0; j < 100; j++)
+                        for (int j = 0; j < T[10]; j++)
                         {
                                 if (maze[j][0] == 'P')
                                 {
@@ -134,7 +134,7 @@ char **whereP(char **maze, int l, int c, char *input, int *T)
         return maze;
 }
 
-char wasvisited(structure start, structure position, structure special)
+char wasvisited(structure start, structure position, structure special, structure finish)
 {
         char rreturn = 1;
         if (position == NULL)
@@ -162,7 +162,8 @@ char wasvisited(structure start, structure position, structure special)
                                 start->prev->left = special;
                         // tutaj powinno byc zwolnione wszystko co jest podlaczone z start start->up/down...
                         // ale narazie samo free(start)
-                        free(start);
+                        freeafterposition(start,special,finish);
+		//	free(start);
                         return 1;
                         // tutaj tez jestem w wywolanej funkcji rekurencyjnie make i zwalniam start byc moze byc sytuacja ze bede chcec miec do tego dostep
                 }
@@ -184,19 +185,19 @@ char wasvisited(structure start, structure position, structure special)
         {
                 if (start->up != NULL)
                         if (start->up->s != -1)
-                                rreturn = wasvisited(start->up, position, special);
+                                rreturn = wasvisited(start->up, position, special, finish);
                 if (start->down != NULL)
                         if (rreturn != 2)
                                 if (start->down->s != -1)
-                                        rreturn = wasvisited(start->down, position, special);
+                                        rreturn = wasvisited(start->down, position, special, finish);
                 if (start->right != NULL)
                         if (rreturn != 2)
                                 if (start->right->s != -1)
-                                        rreturn = wasvisited(start->right, position, special);
+                                        rreturn = wasvisited(start->right, position, special, finish);
                 if (start->left != NULL)
                         if (rreturn != 2)
                                 if (start->left->s != -1)
-                                        rreturn = wasvisited(start->left, position, special);
+                                        rreturn = wasvisited(start->left, position, special,finish);
                 // Tutaj sa jakies bledy ze zwalnianiem jak mam free(position) position = special i wracam do funkcji z której zostalem wywolany to tam normalnie position->x = prawdziwa wartosc position->y tak samo position->s = duza liczba a powinno byc position->x zero/losowa liczba tak samo y a position->s=-1 aktualnie po protsu wylaczam ta funckje nie dziala nie wiem czmeu
                 // printf("%d\n", position->s);
         }
@@ -219,14 +220,14 @@ void make(structure start, char **maze, char *input, int *T, int from, structure
         int Kon = -1; // if k is on up 1 right 2 ...
         do
         {
-                while (T[0] / 100 != T[2])
+                while (T[0] / T[10] != T[2])
                 {
-                        if (T[0] / 100 < T[2])
+                        if (T[0] / T[10] < T[2])
                         {
                                 T[2]--;
                                 load(maze, input, T);
                         }
-                        else if (T[0] / 100 > T[2])
+                        else if (T[0] / T[10] > T[2])
                         {
                                 T[2]++;
                                 load(maze, input, T);
@@ -237,14 +238,14 @@ void make(structure start, char **maze, char *input, int *T, int from, structure
                 ddown = 0;
                 rright = 0;
                 lleft = 0;
-                if (T[0] % 100 != 0)
+                if (T[0] % T[10] != 0)
                 {
-                        if (maze[(T[0] - 1) % 100][T[1]] == ' ' || maze[(T[0] - 1) % 100][T[1]] == 'P')
+                        if (maze[(T[0] - 1) % T[10]][T[1]] == ' ' || maze[(T[0] - 1) % T[10]][T[1]] == 'P')
                         {
                                 corridors++;
                                 upp++;
                         }
-                        if (maze[(T[0] - 1) % 100][T[1]] == 'K')
+                        if (maze[(T[0] - 1) % T[10]][T[1]] == 'K')
                         {
                                 Kon = 1;
                         }
@@ -253,61 +254,61 @@ void make(structure start, char **maze, char *input, int *T, int from, structure
                 {
                         T[2]--;
                         maze = load(maze, input, T);
-                        if (maze[(T[0] - 1) % 100][T[1]] == ' ' || maze[(T[0] - 1) % 100][T[1]] == 'P')
+                        if (maze[(T[0] - 1) % T[10]][T[1]] == ' ' || maze[(T[0] - 1) % T[10]][T[1]] == 'P')
                         {
                                 corridors++;
                                 upp++;
                         }
-                        if (maze[T[0] % 100][T[1]] == 'K')
+                        if (maze[T[0] % T[10]][T[1]] == 'K')
                         {
                                 Kon = 1;
                         }
                         T[2]++;
                         maze = load(maze, input, T);
                 }
-                if (T[0] % 100 != 99)
+                if (T[0] % T[10] != T[10]-1)
                 {
-                        if (maze[(T[0] + 1) % 100][T[1]] == ' ' || (maze[(T[0] + 1) % 100][T[1]] == 'P'))
+                        if (maze[(T[0] + 1) % T[10]][T[1]] == ' ' || (maze[(T[0] + 1) % T[10]][T[1]] == 'P'))
                         {
                                 corridors++;
                                 ddown++;
                         }
-                        if (maze[(T[0] + 1) % 100][T[1]] == 'K')
+                        if (maze[(T[0] + 1) % T[10]][T[1]] == 'K')
                                 Kon = 3;
                 }
                 else
                 {
                         T[2]++;
                         maze = load(maze, input, T);
-                        if (maze[(T[0] + 1) % 100][T[1]] == ' ' || (maze[(T[0] + 1) % 100][T[1]] == 'P'))
+                        if (maze[(T[0] + 1) % T[10]][T[1]] == ' ' || (maze[(T[0] + 1) % T[10]][T[1]] == 'P'))
                         {
                                 corridors++;
                                 ddown++;
                         }
-                        if (maze[(T[0] + 1) % 100][T[1]] == 'K')
+                        if (maze[(T[0] + 1) % T[10]][T[1]] == 'K')
                                 Kon = 3;
                         T[2]--;
                         maze = load(maze, input, T);
                 }
-                if (maze[T[0] % 100][T[1] - 1] == ' ' || maze[T[0] % 100][T[1] - 1] == 'P')
+                if (maze[T[0] % T[10]][T[1] - 1] == ' ' || maze[T[0] % T[10]][T[1] - 1] == 'P')
                 {
                         corridors++;
                         lleft++;
                 }
-                if (maze[T[0] % 100][T[1] - 1] == 'K')
+                if (maze[T[0] % T[10]][T[1] - 1] == 'K')
                         Kon = 4;
-                if (maze[T[0] % 100][T[1] + 1] == ' ' || maze[T[0] % 100][T[1] + 1] == 'P')
+                if (maze[T[0] % T[10]][T[1] + 1] == ' ' || maze[T[0] % T[10]][T[1] + 1] == 'P')
                 {
                         corridors++;
                         rright++;
                 }
-                if (maze[T[0] % 100][T[1] + 1] == 'K')
+                if (maze[T[0] % T[10]][T[1] + 1] == 'K')
                         Kon = 2;
                 if (corridors == 2 && Kon == -1)
                 {
                         if (upp == 1 && from != 1)
                         {
-                                if (T[0] % 100 == 0)
+                                if (T[0] %T[10] == 0)
                                 {
                                         T[2]--;
                                         maze = load(maze, input, T);
@@ -317,7 +318,7 @@ void make(structure start, char **maze, char *input, int *T, int from, structure
                         }
                         else if (ddown == 1 && from != 3)
                         {
-                                if (T[0] % 100 == 99)
+                                if (T[0] % T[10] == T[10]-1)
                                 {
                                         T[2]++;
                                         maze = load(maze, input, T);
@@ -383,14 +384,14 @@ void make(structure start, char **maze, char *input, int *T, int from, structure
                 position->x = T[0];
                 position->y = T[1];
                 structure tmp = start;
-                if (wasvisited(tmp, position, special) != 2)
+                if (wasvisited(tmp, position, special, finish) != 2)
                 {
 
                         if (upp == 1 && from != 1 && position != NULL && position->s != -1)
                         {
                                 position->up = malloc(sizeof(*position));
                                 position->up->s = s + 1; // tu chyba tez fromorg
-                                if (T[0] % 100 == 0)
+                                if (T[0] % T[10] == 0)
                                 {
                                         T[2]--;
                                         maze = load(maze, input, T);
@@ -412,19 +413,19 @@ void make(structure start, char **maze, char *input, int *T, int from, structure
                                 // to moze powodowac bledy ten free na gorze
                                 T[0] = position->x;
                                 T[1] = position->y;
-                                if (T[0] % 100 == 0)
+                                if (T[0] % T[10] == 0)
                                 {
                                         T[2]++;
                                         maze = load(maze, input, T);
                                 }
-                                while (T[0] / 100 != T[2])
+                                while (T[0] / T[10] != T[2])
                                 {
-                                        if (T[0] / 100 < T[2])
+                                        if (T[0] / T[10] < T[2])
                                         {
                                                 T[2]--;
                                                 load(maze, input, T);
                                         }
-                                        else if (T[0] / 100 > T[2])
+                                        else if (T[0] / T[10] > T[2])
                                         {
                                                 T[2]++;
                                                 load(maze, input, T);
@@ -437,7 +438,7 @@ void make(structure start, char **maze, char *input, int *T, int from, structure
                         }
                         if (ddown == 1 && from != 3 && position != NULL && position->s != -1)
                         {
-                                if (T[0] % 100 == 99)
+                                if (T[0] % T[10] == T[10]-1)
                                 {
                                         T[2]++;
                                         maze = load(maze, input, T);
@@ -458,19 +459,19 @@ void make(structure start, char **maze, char *input, int *T, int from, structure
 
                                 T[0] = position->x;
                                 T[1] = position->y;
-                                if (T[0] % 100 == 99)
+                                if (T[0] % T[10] == T[10]-1)
                                 {
                                         T[2]--;
                                         maze = load(maze, input, T);
                                 }
-                                while (T[0] / 100 != T[2])
+                                while (T[0] / T[10] != T[2])
                                 {
-                                        if (T[0] / 100 < T[2])
+                                        if (T[0] / T[10] < T[2])
                                         {
                                                 T[2]--;
                                                 load(maze, input, T);
                                         }
-                                        else if (T[0] / 100 > T[2])
+                                        else if (T[0] / T[10] > T[2])
                                         {
                                                 T[2]++;
                                                 load(maze, input, T);
@@ -497,14 +498,14 @@ void make(structure start, char **maze, char *input, int *T, int from, structure
 
                                 T[1] = position->y;
                                 T[0] = position->x;
-                                while (T[0] / 100 != T[2])
+                                while (T[0] / T[10] != T[2])
                                 {
-                                        if (T[0] / 100 < T[2])
+                                        if (T[0] / T[10] < T[2])
                                         {
                                                 T[2]--;
                                                 load(maze, input, T);
                                         }
-                                        else if (T[0] / 100 > T[2])
+                                        else if (T[0] / T[10] > T[2])
                                         {
                                                 T[2]++;
                                                 load(maze, input, T);
@@ -530,14 +531,14 @@ void make(structure start, char **maze, char *input, int *T, int from, structure
                                 }
                                 T[1] = position->y;
                                 T[0] = position->x;
-                                while (T[0] / 100 != T[2])
+                                while (T[0] / T[10] != T[2])
                                 {
-                                        if (T[0] / 100 < T[2])
+                                        if (T[0] / T[10] < T[2])
                                         {
                                                 T[2]--;
                                                 load(maze, input, T);
                                         }
-                                        else if (T[0] / 100 > T[2])
+                                        else if (T[0] / T[10] > T[2])
                                         {
                                                 T[2]++;
                                                 load(maze, input, T);
@@ -599,26 +600,27 @@ void make(structure start, char **maze, char *input, int *T, int from, structure
 structure way(char *input, int l, int c)
 {
         int s = 0; // distance between wierzhcolki
-        int *T = malloc(sizeof(*T) * 10);
+        int *T = malloc(sizeof(*T) * 11);
         T[0] = 0;       // wspolrzedna x gdzie sie znajduje aktualnie
         T[1] = 0;       // wspolrzedna y
-        T[2] = 0;       // w ktorym segmencie sie znajduje
-        T[3] = l / 100; // ile jest segmentow
-        T[4] = l % 100; // ile jest linii w ostatnim segmencie
-        T[5] = l;       // rozmiar lab
+        T[2] = 0;     	// w ktorym segmencie sie znajduje
+        T[10]=10; //ilosc wierszy ktora wczytujemy do char ** maze
+	T[3] = l / T[10]; // ile jest segmentow
+        T[4] = l % T[10]; // ile jest linii w ostatnim segmencie
+        T[5] = l;        // rozmiar lab
         T[6] = c;       // rozmiar lab
         T[7] = -1;      // wspolrzedna Px
         T[8] = -1;      // wspolrzedna Py
         T[9] = 0;       // w ktorym segmencie jest P
-        char **maze = malloc(sizeof(*maze) * 100);
-        for (int i = 0; i < 100; i++)
+        char **maze = malloc(sizeof(*maze) * T[10]);
+        for (int i = 0; i < T[10]; i++)
         {
                 maze[i] = malloc(sizeof(**maze) * 1025);
         }
         int from; // 1 up 2 right 3 down 4 left
         maze = whereP(maze, l, c, input, T);
-        T[0] = T[7] + 100 * T[9];
-        T[1] = T[8] + 100 * T[9];
+        T[0] = T[7] + T[10] * T[9];
+        T[1] = T[8] + T[10] * T[9];
         if (T[0] == 0)
         {
                 T[0]++;
@@ -665,7 +667,7 @@ structure way(char *input, int l, int c)
 	{printf("(%d, %d)->",abc->x, abc->y); abc=abc->prev;}
 	printf("%d, %d",abc->x, abc->y);
         if(finish->s == INT_MAX ){ printf("znaczy sie ze nie ma rozwiazania labirynt nie ma polaczenia od P do K"); }
-	for (int i = 0; i < 100; i++)
+	for (int i = 0; i < T[10]; i++)
                 free(maze[i]);
         
 	free(maze);
