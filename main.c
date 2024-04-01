@@ -1,3 +1,4 @@
+#include <limits.h>
 #include "solver.h"
 #include <stdio.h>
 #include <stdlib.h>
@@ -10,18 +11,12 @@
 #include "writer.h"
 void freee(structure position)
 {
-/*
-if(position->up!=NULL && position->up->s!=-1){printf("UP ");}
-if(position->down!=NULL && position->down->s!=-1){printf("DOWN ");}
-if(position->right!=NULL && position->right->s!=-1){printf("RIGHT ");}
-if(position->left!=NULL && position->left->s!=-1){printf("LEFT ");}
-printf("--------\n");
-*/
 if(position->up!=NULL && position->up->s!=-1){freee(position->up);}
 if(position->down!=NULL && position->down->s!=-1){freee(position->down);}
 if(position->right!=NULL && position->right->s!=-1){freee(position->right);}
 if(position->left!=NULL && position->left->s!=-1){freee(position->left);}
 free(position);
+position=NULL;
 }
 int main(int argc, char ** argv)
 {
@@ -44,7 +39,6 @@ while((opt=getopt(argc, argv, "m:o:h"))!=-1){
 		break;		
 	
 	default:
-	//printf("wychodze defaultem");
 	break;
 	}
 }
@@ -82,14 +76,13 @@ return 1;
 
 int *T;
 T=rozmiar(zpliku);
-//printf("-------(%d, %d,%d, %d, %d, %d, %d, %d,%d, %d )-------",T[0],T[1],T[2], T[3],T[4], T[5], T[6], T[7], T[8], T[9]);
 structure start =way( zpliku, T[0], T[1] );
-//printf("sukcess");
 if(dopliku!=NULL)free(dopliku);
 structure special = start->prev;
 structure finish = special->prev;
 T[2] = start->x;
 T[3] = start->y;
+if(finish->s !=INT_MAX){ 
 fprintf(out, "\nSTART\n");
 char ** maze = malloc(sizeof(*maze ) * T[7]);
 for(int i=0; i<T[7]; i++)
@@ -97,15 +90,19 @@ maze[i] = malloc(sizeof(**maze)* 1025);
 maze = load2(maze, zpliku, T );
 go_start_first_vertex(out, zpliku,T,start,maze);
 fprintf(out, "STOP");
-free(zpliku);
+
 for(int i=0; i<T[7]; i++)
 free(maze[i]);
 free(maze);
+}
+free(zpliku);
 free(T);
 freee(start);
 //free(finish) nie rozumiem czemu jak to sie odblokuje to nie stwarza to bledow finish jest usuwane w freee a mimo ze jak jest odkomentowane to bledow nie robi aplikacja do badania pamieci pokazuje ze i z tym zakomentowanym i bez tego nie wplywa to na dzialanie programu
-free(special);
+
+if(special!=NULL&& special->s==-1)free(special);
 fclose(out);
+
 return 0;
 }
 

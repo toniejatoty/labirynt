@@ -160,15 +160,12 @@ char wasvisited(structure start, structure position, structure special, structur
                                 start->prev->down = special;
                         if (start->prev->left != NULL && start->prev->left == start)
                                 start->prev->left = special;
-                        // tutaj powinno byc zwolnione wszystko co jest podlaczone z start start->up/down...
-                        // ale narazie samo free(start)
                         freeafterposition(start,special,finish);
-		//	free(start);
                         return 1;
                         // tutaj tez jestem w wywolanej funkcji rekurencyjnie make i zwalniam start byc moze byc sytuacja ze bede chcec miec do tego dostep
                 }
                 else if ((position->s > start->s) && (position->s != -1) && (start->s != -1))
-                { // free(position);
+                { 
                         if (position->prev->up != NULL && position->prev->up == position)
                                 position->prev->up = special;
                         if (position->prev->right != NULL && position->prev->right == position)
@@ -339,14 +336,8 @@ void make(structure start, char **maze, char *input, int *T, int from, structure
                         s++;
                 }
         } while (corridors == 2 && Kon == -1);
-        // s++;
         if (Kon != -1)
         {
-                //printf("ZNALAZLEM SIE W K odl wynosi %d\n", s);
-           /*structure abc = finish;
-	   while(abc!=NULL && abc->s!=-1){fprintf(stderr,"(%d,%d)-->",abc->x, abc->y); abc=abc->prev;}
-	   printf("\n");
-*/	    
    	   if (s < finish->s){
 			if(position->prev->up != NULL && position->prev->up==position){position->prev->up=finish;}
 			else if(position->prev->down != NULL && position->prev->down==position){position->prev->down=finish;}
@@ -371,16 +362,10 @@ void make(structure start, char **maze, char *input, int *T, int from, structure
                 {
                  ;      // delasmuch(position, T);
                 }
-/*      	abc = finish;
-
-		while(abc!=NULL && abc->s!=-1){printf("(%d,%d)-->",abc->x, abc->y); abc=abc->prev;}
-	  	 printf("\n");
-  */
 	 	 }
         if (corridors >= 3 && Kon == -1)
         {
                 position->s = s;
-                // printf("ZNALAZLEM SIE wedlug programu w wierzczholku T[0] = %d, T[1] = %d\n", T[0], T[1]);
                 position->x = T[0];
                 position->y = T[1];
                 structure tmp = start;
@@ -390,7 +375,7 @@ void make(structure start, char **maze, char *input, int *T, int from, structure
                         if (upp == 1 && from != 1 && position != NULL && position->s != -1)
                         {
                                 position->up = malloc(sizeof(*position));
-                                position->up->s = s + 1; // tu chyba tez fromorg
+                                position->up->s = s + 1; 
                                 if (T[0] % T[10] == 0)
                                 {
                                         T[2]--;
@@ -407,10 +392,8 @@ void make(structure start, char **maze, char *input, int *T, int from, structure
                                                 free(position->up);
                                         }
                                         position->up = special;
-                                        // printf("OHO zwalniam T[0] = %d, T[1] = %d", T[0], T[1]);
-                                }
-
-                                // to moze powodowac bledy ten free na gorze
+                                        
+                                } 
                                 T[0] = position->x;
                                 T[1] = position->y;
                                 if (T[0] % T[10] == 0)
@@ -454,9 +437,7 @@ void make(structure start, char **maze, char *input, int *T, int from, structure
                                         if (position->down != NULL && position->down->s != -1)
                                                 free(position->down);
                                         position->down = special;
-                                        // printf("OHO zwalniam T[0] = %d, T[1] = %d", T[0], T[1]);
                                 }
-
                                 T[0] = position->x;
                                 T[1] = position->y;
                                 if (T[0] % T[10] == T[10]-1)
@@ -493,7 +474,6 @@ void make(structure start, char **maze, char *input, int *T, int from, structure
                                         if (position->right != NULL && position->right->s != -1)
                                                 free(position->right);
                                         position->right = special;
-                                        // printf("OHO zwalniam T[0] = %d, T[1] = %d", T[0], T[1]);
                                 }
 
                                 T[1] = position->y;
@@ -527,7 +507,6 @@ void make(structure start, char **maze, char *input, int *T, int from, structure
                                         if (position->left != NULL && position->left->s != -1)
                                                 free(position->left);
                                         position->left = special;
-                                        // printf("OHO zwalniam T[0] = %d, T[1] = %d", T[0], T[1]);
                                 }
                                 T[1] = position->y;
                                 T[0] = position->x;
@@ -566,7 +545,6 @@ void make(structure start, char **maze, char *input, int *T, int from, structure
                 }
                 free(position);
                 position = special;
-                // printf("aha\n");
         }
 
         else if (corridors == 1 && Kon == -1 && position != NULL && position->s != -1)
@@ -592,7 +570,6 @@ void make(structure start, char **maze, char *input, int *T, int from, structure
                         {
                                 position->prev->right = special;
                         }
-                // printf("ZWALANIAM position->%d, position->%d\n",position->x, position->y);
                 free(position);
                 position = NULL;
         }
@@ -604,7 +581,7 @@ structure way(char *input, int l, int c)
         T[0] = 0;       // wspolrzedna x gdzie sie znajduje aktualnie
         T[1] = 0;       // wspolrzedna y
         T[2] = 0;     	// w ktorym segmencie sie znajduje
-        T[10]=10; //ilosc wierszy ktora wczytujemy do char ** maze
+        T[10]=100; //ilosc wierszy ktora wczytujemy do char ** maze
 	T[3] = l / T[10]; // ile jest segmentow
         T[4] = l % T[10]; // ile jest linii w ostatnim segmencie
         T[5] = l;        // rozmiar lab
@@ -660,12 +637,6 @@ structure way(char *input, int l, int c)
 	finish->right=special;
      make(start, maze, input, T, from, start, finish, special);
         
-	printf("ODLEGLOSC WYNOSI: %d", finish->s);
-	printf("\n DROGA TO:\n");
-	structure abc = finish;
-	while(abc->prev!=NULL &&abc->prev->s!=-1)
-	{printf("(%d, %d)->",abc->x, abc->y); abc=abc->prev;}
-	printf("%d, %d",abc->x, abc->y);
         if(finish->s == INT_MAX ){ printf("znaczy sie ze nie ma rozwiazania labirynt nie ma polaczenia od P do K"); }
 	for (int i = 0; i < T[10]; i++)
                 free(maze[i]);
