@@ -40,10 +40,18 @@ void binary_read(int *T) {
 	int sum_c=0;
 	int sum_l=0;
 	do {
-		count = 0;
+		count=0;
 		fread(&dummy,1,1,in);		
 		fread(&value,1,1,in);		//wartość słowa kodowego
 		fread(&count,1,1,in);		//licznik
+		if(sum_c=T[4] && sum_l=T[5]) {
+			sum_c++
+			fprintf(fout, "P");
+		}
+		if(sum_c=header.exity && sum_l=header.exitx) {
+			sum_c++;
+			fprintf(fout,"K");
+	}
 		for (int i = 0; i < count; i) {
 			sum_c++;
 			if(sum_c == T[1]) {
@@ -59,6 +67,8 @@ void binary_read(int *T) {
 				continue;
 			}
 			fprintf(fout, "%c", value);
+		}
+		sum_l++;
 	}while (sum_l==(T[0]+1));
 
 	
