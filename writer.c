@@ -69,7 +69,7 @@ void gofromvertextovertex(char ** maze, FILE * out, char * in, int *T,int fromor
 			up=0; down=0; right=0; left=0;
 			
 			//up	
-			if(T[0]%T[7]==0)
+			if(T[2]%T[7]==0)
 			{
 			T[6]--;
 			maze=load2(maze,in,T);
@@ -80,7 +80,7 @@ void gofromvertextovertex(char ** maze, FILE * out, char * in, int *T,int fromor
 			up=1;
 			if(maze[(T[2]-1)%T[7]][T[3]]=='K')Kon=1;
 			}
-			if(T[0]%T[7]==0)
+			if(T[2]%T[7]==0)
 			{
 			T[6]++;
 			maze=load2(maze,in, T);

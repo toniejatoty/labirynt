@@ -115,9 +115,9 @@ int *rozmiar(char *input)
 	// T8 ile jest linii w ostatnim segmencie
 	// T9 ile jest segmentow
 	T[6] = 0;
-	T[7]=100;
-	T[8] = T[0]%T[7];
-	T[9] = T[0]/T[7];
+	T[7]=5;
+	T[8] = T[0]%T[7]==0? T[7]:T[0]%T[7];//T[0]%T[7];
+	T[9] = T[0]%T[7] == 0 ? T[0]/T[7] -1: T[0]/T[7];// T[0]/T[7];
 	return T;
 }
 
