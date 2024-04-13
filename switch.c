@@ -60,20 +60,5 @@ char **load(char **maze, char *input, int *T)
                 }
         }
         fclose(in);
-        // for(int i=0; i<100; i++)
-        // for(int j=0; j<22; j++)
-        //{
-        // printf("%c",maze[i][j]);
-        // }
-        // printf("\n\n\n");
-        // printf("\n\n-->%c<--",maze[4][0]);
-        // printf("\n\n-->%c<--",maze[4][1]);
-        // printf("Drugi i 3 wiersz wygladaja nastepujaco:");
-        // for(int j=0; j<100; j++)
-        // printf("%c", maze[1][j]);
-        // printf("\n\n\n");
-        // for(int j=0; j<100; j++)
-        // printf("%c", maze[2][j]);
         return maze;
 }
-

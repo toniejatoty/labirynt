@@ -71,15 +71,4 @@ void freeafterposition(structure position, structure special,structure finish)
 	return;
       
 }
-/*
-void findwspolne(structure oldfinish, structure newfinish)
-{
-        structure old=finish;
-        structure new=newfinish;
-while(old->prev!=NULL)
-{ old=old->prev;
-
-while(new->prev!=NULL)
-}
-}*/
 

@@ -21,7 +21,7 @@ char **whereP(char **maze, int l, int c, char *input, int *T)
                                         a = 'P';
                                         T[7] = 0;
                                         T[8] = i;
-                                }
+			       	}
                         }
                         for (int j = 0; j < T[4]; j++)
                         {
@@ -31,19 +31,19 @@ char **whereP(char **maze, int l, int c, char *input, int *T)
                                         T[7] = j;
                                         T[8] = 0;
                                 }
-                                if (maze[j][T[6]] == 'P')
+                                if (maze[j][T[6]-1] == 'P')
                                 {
                                         a = 'P';
                                         T[7] = j;
-                                        T[8] = T[6];
+                                        T[8] = T[6]-1;
                                 }
                         }
                         for (int i = 0; i < T[6]; i++)
                         {
-                                if (maze[T[4]][i] == 'P')
+                                if (maze[T[4]-1][i] == 'P')
                                 {
                                         a = 'P';
-                                        T[7] = T[4];
+                                        T[7] = T[4]-1;
                                         T[8] = i;
                                 }
                         }
@@ -68,11 +68,11 @@ char **whereP(char **maze, int l, int c, char *input, int *T)
                                         T[7] = j;
                                         T[8] = 0;
                                 }
-                                if (maze[j][T[6]] == 'P')
+                                if (maze[j][T[6]-1] == 'P')
                                 {
                                         a = 'P';
                                         T[7] = j;
-                                        T[8] = T[6];
+                                        T[8] = T[6]-1;
                                 }
                         }
                 }
@@ -80,10 +80,10 @@ char **whereP(char **maze, int l, int c, char *input, int *T)
                 {
                         for (int i = 0; i < T[6]; i++)
                         {
-                                if (maze[T[4]][i] == 'P')
+                                if (maze[T[4]-1][i] == 'P')
                                 {
                                         a = 'P';
-                                        T[7] = T[4];
+                                        T[7] = (T[4]-1)+ T[2]*T[10];
                                         T[8] = i;
                                 }
                         }
@@ -92,14 +92,14 @@ char **whereP(char **maze, int l, int c, char *input, int *T)
                                 if (maze[j][0] == 'P')
                                 {
                                         a = 'P';
-                                        T[7] = j;
+                                        T[7] = j + T[2]*T[10];
                                         T[8] = 0;
                                 }
-                                if (maze[j][T[6]] == 'P')
+                                if (maze[j][T[6]-1] == 'P')
                                 {
                                         a = 'P';
-                                        T[7] = j;
-                                        T[8] = T[6];
+                                        T[7] = j + T[2]*T[10];
+                                        T[8] = T[6]-1;
                                 }
                         }
                 }
@@ -110,14 +110,14 @@ char **whereP(char **maze, int l, int c, char *input, int *T)
                                 if (maze[j][0] == 'P')
                                 {
                                         a = 'P';
-                                        T[7] = j;
+                                        T[7] = j+ T[2]*T[10];
                                         T[8] = 0;
                                 }
-                                if (maze[j][T[6]] == 'P')
+                                if (maze[j][T[6]-1] == 'P')
                                 {
                                         a = 'P';
-                                        T[7] = j;
-                                        T[8] = T[6];
+                                        T[7] = j+ T[2]*T[10];
+                                        T[8] = T[6]-1;
                                 }
                         }
                 }
@@ -582,8 +582,8 @@ structure way(char *input, int l, int c)
         T[1] = 0;       // wspolrzedna y
         T[2] = 0;     	// w ktorym segmencie sie znajduje
         T[10]=100; //ilosc wierszy ktora wczytujemy do char ** maze
-	T[3] = l / T[10]; // ile jest segmentow
-        T[4] = l % T[10]; // ile jest linii w ostatnim segmencie
+	T[3] = l%T[10] == 0 ? l/T[10] - 1 :l / T[10]; // ile jest segmentow
+        T[4] = l % T[10]==0 ? T[10]:l%T[10]; // ile jest linii w ostatnim segmencie
         T[5] = l;        // rozmiar lab
         T[6] = c;       // rozmiar lab
         T[7] = -1;      // wspolrzedna Px
@@ -596,9 +596,10 @@ structure way(char *input, int l, int c)
         }
         int from; // 1 up 2 right 3 down 4 left
         maze = whereP(maze, l, c, input, T);
-        T[0] = T[7] + T[10] * T[9];
-        T[1] = T[8] + T[10] * T[9];
-        if (T[0] == 0)
+        T[0] = T[7]; //+ T[10] * T[9];
+        T[1] = T[8]; //+ T[10] * T[9];
+        //printf("%d --> %d", T[0], T[1]);
+	if (T[0] == 0)
         {
                 T[0]++;
                 from = 1;
@@ -608,12 +609,12 @@ structure way(char *input, int l, int c)
                 T[1]++;
                 from = 4;
         }
-        if (T[0] == T[5])
+        if (T[0] == T[5]-1)
         {
                 T[0]--;
                 from = 3;
         } // moze byc blad ze trzeba skorzystac z load fukcji
-        if (T[1] == T[6])
+        if (T[1] == T[6]-1)
         {
                 T[1]--;
                 from = 2;
