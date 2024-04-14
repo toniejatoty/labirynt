@@ -37,7 +37,7 @@ int *binary_read(char *input) {
 	char dummy;
 	char value;
 	int count;
-	int sum_c=0;
+	int sum_c=1;
 	int sum_l=0;
 	char was_P_or_K=0;
 	do {
@@ -47,12 +47,12 @@ int *binary_read(char *input) {
 		fread(&count,1,1,in);		//licznik
 		if(sum_c==T[4] && sum_l==T[5]) {
 			sum_c++;
-			fprintf(fout, "P");
+			fprintf(fout, "P");		//miejsce na P
 			was_P_or_K=1;
 		}
 		if(sum_c==header.exity && sum_l==header.exitx) {
 			sum_c++;
-			fprintf(fout,"K");
+			fprintf(fout,"K");		//miejsce na K
 			was_P_or_K=1;
 	}
 		for (int i = 0; i <= count; i++) {
@@ -60,18 +60,18 @@ int *binary_read(char *input) {
 				i++;
 				was_P_or_K=0;
 			}
-			if(sum_c == T[1]-1) {
+			if(sum_c == T[1]) {
 				fprintf(fout,"\n");
 				sum_l++;
 				if (i!=count-1) {
-					sum_c=0;
+					sum_c=1;
 					for (int j = 0; j <= count-i;j++) {
 						fprintf(fout,"%c",value);
 						sum_c++;
 					}
 				}
 				else
-					sum_c=0;
+					sum_c=1;
 				continue;
 			}
 			sum_c++;
