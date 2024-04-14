@@ -9,6 +9,7 @@
 #include "structure.h"
 #include "switch_writer.h"
 #include "writer.h"
+#include "binary_reader.h"
 void freee(structure position)
 {
 if(position->up!=NULL && position->up->s!=-1){freee(position->up);}
@@ -21,8 +22,8 @@ position=NULL;
 int main(int argc, char ** argv)
 {
 int opt;
-char h=0; char czybylom=0; char *zpliku = NULL; FILE * out=stdout; char * dopliku = NULL;
-while((opt=getopt(argc, argv, "m:o:h"))!=-1){
+char h=0; char czybylom=0; char *zpliku = NULL; FILE * out=stdout; char * dopliku = NULL; char czybin = 0;
+while((opt=getopt(argc, argv, "m:o:h:b"))!=-1){
 	switch(opt)
 	{
 	case 'm':
@@ -36,7 +37,9 @@ while((opt=getopt(argc, argv, "m:o:h"))!=-1){
 	case 'h':
 	if(optarg == NULL|| strcmp(optarg, "")==0)	
 		h=4;
-		break;		
+		break;
+	case 'b':
+		czybin=1;
 	
 	default:
 	break;
@@ -67,6 +70,12 @@ fprintf(stderr,"Program nie posiada uprawnień do zapisania w podanym pliku rozw
 free(zpliku);
 return 1;
 }
+
+int *T;
+if(czybin != 0) {
+	T=binary_read(zpliku);
+	zpliku="binary_to_text";
+}
 if((czypoprawnylab(zpliku,argv[0]))!=0)
 {
 free(zpliku);
@@ -74,7 +83,6 @@ return 1;
 //BYc moze tutaj eszcze cos zwolnic
 }
 
-int *T;
 T=rozmiar(zpliku);
 structure start =way( zpliku, T[0], T[1] );
 if(dopliku!=NULL)free(dopliku);

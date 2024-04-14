@@ -1,6 +1,6 @@
 #include "binary_reader.h"
 
-struct h {
+typedef struct h {
 	int File_Id;
 	char ESC;
 	short columns;
@@ -15,12 +15,12 @@ struct h {
 	char separator;
 	char wall;
 	char path;
-} pragma pack typedef head_struct;
+} __attribute__((packed)) head_struct;
 
-void binary_read(int *T) {
-	
+int *binary_read(char *input) {
+	int *T = calloc(10,sizeof(*T));
 	FILE *in = fopen(input, "rb");
-	if (int == NULL)
+	if (in == NULL)
 	{
 		T[1] = -2;
 		return T;
@@ -39,37 +39,46 @@ void binary_read(int *T) {
 	int count;
 	int sum_c=0;
 	int sum_l=0;
+	char was_P_or_K=0;
 	do {
 		count=0;
 		fread(&dummy,1,1,in);		
 		fread(&value,1,1,in);		//wartość słowa kodowego
 		fread(&count,1,1,in);		//licznik
-		if(sum_c=T[4] && sum_l=T[5]) {
-			sum_c++
+		if(sum_c==T[4] && sum_l==T[5]) {
+			sum_c++;
 			fprintf(fout, "P");
+			was_P_or_K=1;
 		}
-		if(sum_c=header.exity && sum_l=header.exitx) {
+		if(sum_c==header.exity && sum_l==header.exitx) {
 			sum_c++;
 			fprintf(fout,"K");
+			was_P_or_K=1;
 	}
-		for (int i = 0; i < count; i) {
-			sum_c++;
-			if(sum_c == T[1]) {
+		for (int i = 0; i <= count; i++) {
+			if(was_P_or_K!=0) {
+				i++;
+				was_P_or_K=0;
+			}
+			if(sum_c == T[1]-1) {
 				fprintf(fout,"\n");
-				if (i!=count-1)
-				sum_c=0;
-					for (int j = 0; j < count-i) {
-						sum++;
+				sum_l++;
+				if (i!=count-1) {
+					sum_c=0;
+					for (int j = 0; j <= count-i;j++) {
 						fprintf(fout,"%c",value);
+						sum_c++;
 					}
+				}
 				else
 					sum_c=0;
 				continue;
 			}
+			sum_c++;
 			fprintf(fout, "%c", value);
 		}
-		sum_l++;
-	}while (sum_l==(T[0]+1));
-
-	
+	}while (sum_l!=(T[0]-1));
+	fclose(in);
+	fclose(fout);
+	return T;
 }
