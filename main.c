@@ -103,7 +103,8 @@ for(int i=0; i<T[7]; i++)
 free(maze[i]);
 free(maze);
 }
-free(zpliku);
+if(czybin==0)
+	free(zpliku);
 free(T);
 freee(start);
 //free(finish) nie rozumiem czemu jak to sie odblokuje to nie stwarza to bledow finish jest usuwane w freee a mimo ze jak jest odkomentowane to bledow nie robi aplikacja do badania pamieci pokazuje ze i z tym zakomentowanym i bez tego nie wplywa to na dzialanie programu

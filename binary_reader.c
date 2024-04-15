@@ -39,29 +39,22 @@ int *binary_read(char *input) {
 	int count;
 	int sum_c=1;
 	int sum_l=0;
-	char was_P_or_K=0;
 	do {
 		count=0;
 		fread(&dummy,1,1,in);		
 		fread(&value,1,1,in);		//wartość słowa kodowego
 		fread(&count,1,1,in);		//licznik
-		if(sum_c==T[5] && (sum_l+1)==T[4]) {
-			sum_c++;
-			fprintf(fout, "P");		//miejsce na P
-			was_P_or_K=1;
-		}
-		if(sum_c==header.exitx && (sum_l+1)==header.exity) {
-			sum_c++;
-			fprintf(fout,"K");		//miejsce na K
-			was_P_or_K=1;
-	}
 		for (int i = 0; i <= count; i++) {
-			if(was_P_or_K!=0) {
+			if(sum_c==T[5] && (sum_l+1)==T[4]) {
+				sum_c++;
 				i++;
-				was_P_or_K=0;
+				fprintf(fout,"P");	//miejsce na p
 			}
 			if(sum_c == T[1]) {
-				fprintf(fout,"X\n");
+				if(sum_c==header.exitx && (sum_l+1)==header.exity)
+					fprintf(fout,"K\n");				//miejsce na K
+				else
+					fprintf(fout,"X\n");
 				sum_l++;
 				if (i!=count) {
 					for (int j = 0; j <= count-i;j++) {
