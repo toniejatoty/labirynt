@@ -13,6 +13,7 @@ void help() {
         printf("OPCJE:\n\n");
         printf("\t-m [nazwa pliku] - Nazwa pliku z labiryntem\n");
         printf("\t-o [nazwa pliku] - Nazwa pliku do którego zostanie zapisany wynik, brak będzie oznaczał, że wynik zostanie wypisany na standardowe wyjście\n");
+	printf("\t-b - Należy podać jeżeli plik podany w fladze -m jest plikiem binarnym\n");
         printf("\t-h - Podaje pomoc odnośnie programu\n");
 }
 
