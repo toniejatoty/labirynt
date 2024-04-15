@@ -45,12 +45,12 @@ int *binary_read(char *input) {
 		fread(&dummy,1,1,in);		
 		fread(&value,1,1,in);		//wartość słowa kodowego
 		fread(&count,1,1,in);		//licznik
-		if(sum_c==T[4] && sum_l==T[5]) {
+		if(sum_c==T[5] && (sum_l+1)==T[4]) {
 			sum_c++;
 			fprintf(fout, "P");		//miejsce na P
 			was_P_or_K=1;
 		}
-		if(sum_c==header.exity && sum_l==header.exitx) {
+		if(sum_c==header.exitx && (sum_l+1)==header.exity) {
 			sum_c++;
 			fprintf(fout,"K");		//miejsce na K
 			was_P_or_K=1;
@@ -60,11 +60,10 @@ int *binary_read(char *input) {
 				i++;
 				was_P_or_K=0;
 			}
-			if(sum_c == (T[1])) {
-				fprintf(fout,"\n");
+			if(sum_c == T[1]) {
+				fprintf(fout,"X\n");
 				sum_l++;
 				if (i!=count) {
-					sum_c=1;
 					for (int j = 0; j <= count-i;j++) {
 						fprintf(fout,"%c",value);
 						sum_c++;
@@ -77,7 +76,7 @@ int *binary_read(char *input) {
 			sum_c++;
 			fprintf(fout, "%c", value);
 		}
-	}while (sum_l!=(T[0]-1));
+	}while (sum_l!=(T[0]));
 	fclose(in);
 	fclose(fout);
 	return T;
