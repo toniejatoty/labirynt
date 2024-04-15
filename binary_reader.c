@@ -60,10 +60,10 @@ int *binary_read(char *input) {
 				i++;
 				was_P_or_K=0;
 			}
-			if(sum_c == T[1]) {
+			if(sum_c == (T[1])) {
 				fprintf(fout,"\n");
 				sum_l++;
-				if (i!=count-1) {
+				if (i!=count) {
 					sum_c=1;
 					for (int j = 0; j <= count-i;j++) {
 						fprintf(fout,"%c",value);
