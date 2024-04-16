@@ -23,7 +23,7 @@ int main(int argc, char ** argv)
 {
 int opt;
 char h=0; char czybylom=0; char *zpliku = NULL; FILE * out=stdout; char * dopliku = NULL; char czybin = 0;
-while((opt=getopt(argc, argv, "m:o:h:b"))!=-1){
+while((opt=getopt(argc, argv, "m:o:hb"))!=-1){
 	switch(opt)
 	{
 	case 'm':
@@ -40,6 +40,7 @@ while((opt=getopt(argc, argv, "m:o:h:b"))!=-1){
 		break;
 	case 'b':
 		czybin=1;
+		break;
 	
 	default:
 	break;
